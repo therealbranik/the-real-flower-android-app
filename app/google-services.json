@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "472266236660",
+    "firebase_url": "https://therealflower-7629f.firebaseio.com",
+    "project_id": "therealflower-7629f",
+    "storage_bucket": "therealflower-7629f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472266236660:android:324fd06b094a45ac",
+        "android_client_info": {
+          "package_name": "edu.therealbranik.therealflower"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "472266236660-kfkcjvfhl3b2pfftrtvdod89rmlmft65.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.therealbranik.therealflower",
+            "certificate_hash": "8d766d8d030162c59de0a34c4e418fe1e90c743b"
+          }
+        },
+        {
+          "client_id": "472266236660-flvnd8lvdtss0pb5v49klnskqnlhv1lc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBljnWEl532PgmIDebbD1iRNGP111-lQN0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "472266236660-flvnd8lvdtss0pb5v49klnskqnlhv1lc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

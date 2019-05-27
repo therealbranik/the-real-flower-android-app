@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">The Real Flower</string>
+    <string name="email">e-mail</string>
+    <string name="password">password</string>
+    <string name="login">Log in</string>
+    <string name="singup">Sign up</string>
+    <string name="button_google">Google</string>
+    <string name="button_facebook">Facebook</string>
+    <string name="login_failed">Failed login</string>
+    <string name="signin_failed">Failed sigin</string>
+    <string name="username">Username</string>
+    <string name="password_confirm">Confirm password</string>
+    <string name="firstName">First name</string>
+    <string name="lastName">Last name</string>
+    <string name="phoneNumber">Phone number</string>
+    <string name="register">Register</string>
+    <string name="incomplite_fields">Incomplete fields!</string>
+    <string name="passwords_dont_match">Passwords don\'t match!</string>
+</resources>

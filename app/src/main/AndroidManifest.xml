@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".login_register.RegisterActivity"></activity>
         <activity android:name=".homepage.HomeScreenActivity" />
-        <activity android:name=".login_register.LoginActivity" />
+        <activity android:name=".login_register.LoginActivity" android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

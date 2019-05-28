@@ -29,8 +29,12 @@ public class LoginActivity extends AppCompatActivity {
     Button buttonGoogle;
     Button buttonFacebook;
 
+
     private void LogIn(String email, String password) {
-        if (email.isEmpty() || password.isEmpty()) return;
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(LoginActivity.this, R.string.incomplite_fields, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
@@ -47,12 +51,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    // TODO ZA SADA
+
     private void SingIn (String email, String password) {
         Intent i = new Intent(this, RegisterActivity.class);
         startActivity(i);
         finish();
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -85,6 +86,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        imageViewAvatar.setDrawingCacheEnabled(true);
+        imageViewAvatar.buildDrawingCache();
         imageViewAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,11 +192,17 @@ public class RegisterActivity extends AppCompatActivity {
                 String fileName = "asdasdasd" + ".jpg";
                 StorageReference avatarsRef = mStorageRef.child("images/avatars/" + fileName);
 
-                Bitmap bitmapImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageURI);
-
+                Bitmap bitmap = ((BitmapDrawable) imageViewAvatar.getDrawable()).getBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();
+
+
+//                Bitmap bitmapImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageURI);
+//
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//                byte[] data = baos.toByteArray();
 
                 UploadTask uploadTask = avatarsRef.putBytes(data);
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

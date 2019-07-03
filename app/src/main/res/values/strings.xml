@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">The Real Flower</string>
+    <string name="email">e-mail</string>
+    <string name="password">password</string>
+    <string name="login">Log in</string>
+    <string name="singup">Sign up</string>
+    <string name="button_google">Google</string>
+    <string name="button_facebook">Facebook</string>
+    <string name="login_failed">Failed login</string>
+    <string name="signin_failed">Failed sigin</string>
+    <string name="username">Username</string>
+    <string name="password_confirm">Confirm password</string>
+    <string name="firstName">First name</string>
+    <string name="lastName">Last name</string>
+    <string name="phoneNumber">Phone number</string>
+    <string name="register">Register</string>
+    <string name="incomplite_fields">Incomplete fields!</string>
+    <string name="passwords_dont_match">Passwords don\'t match!</string>
+    <string name="uploadImage">Upload iamge</string>
+    <string name="upload">Upload</string>
+    <string name="takePhoto">Take photo</string>
+    <string name="image_required">Image required</string>
+    <string name="full_name">Full Name</string>
+    <string name="title_activity_home_screen">HomeScreenActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="signout">Sign out</string>
+    <string name="title_activity_proba">ProbaActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

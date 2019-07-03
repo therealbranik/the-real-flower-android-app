@@ -174,6 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
                 || confirmedPassword.isEmpty()
                 || fullname.isEmpty()
                 )
+
             return false;
         else
             return true;

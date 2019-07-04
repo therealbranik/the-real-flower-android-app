@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.Nullable;
@@ -17,8 +18,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.os.PersistableBundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.therealbranik.therealflower.R;
 import edu.therealbranik.therealflower.login_register.LoginActivity;
@@ -36,6 +37,7 @@ public class HomescreenActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Toast.makeText(HomescreenActivity.this, item.getItemId()+"", Toast.LENGTH_SHORT).show();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     mTextMessage.setText(R.string.title_home);
@@ -43,7 +45,7 @@ public class HomescreenActivity extends AppCompatActivity {
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_dashboard);
                     return true;
-                case R.id.navigation_notifications:
+                case R.id.navigation_notifications2:
                     mTextMessage.setText(R.string.title_notifications);
                     return true;
             }
@@ -51,21 +53,40 @@ public class HomescreenActivity extends AppCompatActivity {
         }
     };
 
+    private NavigationView.OnNavigationItemSelectedListener mOnDrawerNavigationItemSelectedListener =
+            new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.nav_item_signout: {
+                            mAuth.signOut();
+                            Intent i = new Intent(HomescreenActivity.this, LoginActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
+                    }
+                    return false;
+                }
+            };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homescreen);
         mAuth = FirebaseAuth.getInstance();
         BottomNavigationView navView = (BottomNavigationView) findViewById(R.id.bottom_nav_view);
+        NavigationView navViewDrawer = (NavigationView) findViewById(R.id.nav_view);
         mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navViewDrawer.setNavigationItemSelectedListener(mOnDrawerNavigationItemSelectedListener);
         toolbar = (Toolbar) findViewById(R.id.toolbar_homescreen);
+        toolbar.setNavigationIcon(R.drawable.baseline_menu_24);
         setSupportActionBar(toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.app_name, R.string.app_name);
         drawer.addDrawerListener(toggle);
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
-//        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         mTextMessage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,8 +113,8 @@ public class HomescreenActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (toggle.onOptionsItemSelected(item)) return true;
-        //TODO
+        if (toggle.onOptionsItemSelected(item))
+            return true;
 
         return super.onOptionsItemSelected(item);
     }

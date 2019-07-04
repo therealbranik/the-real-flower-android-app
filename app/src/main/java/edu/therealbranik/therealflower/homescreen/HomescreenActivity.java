@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -23,14 +24,15 @@ import android.widget.Toast;
 
 import edu.therealbranik.therealflower.R;
 import edu.therealbranik.therealflower.login_register.LoginActivity;
+import edu.therealbranik.therealflower.post.AddPostActivity;
 
 public class HomescreenActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
-    private TextView mTextMessage;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private Toolbar toolbar;
+    private FloatingActionButton fab;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -40,13 +42,16 @@ public class HomescreenActivity extends AppCompatActivity {
             Toast.makeText(HomescreenActivity.this, item.getItemId()+"", Toast.LENGTH_SHORT).show();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+//                    mTextMessage.setText(R.string.title_home);
                     return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                case R.id.navigation_social:
+//                    mTextMessage.setText(R.string.title_dashboard);
                     return true;
-                case R.id.navigation_notifications2:
-                    mTextMessage.setText(R.string.title_notifications);
+                case R.id.navigation_explore:
+//                    mTextMessage.setText(R.string.title_notifications);
+                    return true;
+                case R.id.navigation_profile:
+//                    mTextMessage.setText(R.string.title_notifications);
                     return true;
             }
             return false;
@@ -76,7 +81,6 @@ public class HomescreenActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         BottomNavigationView navView = (BottomNavigationView) findViewById(R.id.bottom_nav_view);
         NavigationView navViewDrawer = (NavigationView) findViewById(R.id.nav_view);
-        mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navViewDrawer.setNavigationItemSelectedListener(mOnDrawerNavigationItemSelectedListener);
         toolbar = (Toolbar) findViewById(R.id.toolbar_homescreen);
@@ -87,14 +91,13 @@ public class HomescreenActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        fab = (FloatingActionButton) findViewById(R.id.fab_add_post);
 
-        mTextMessage.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signOut();
-                Intent i = new Intent(HomescreenActivity.this, LoginActivity.class);
+                Intent i = new Intent(HomescreenActivity.this, AddPostActivity.class);
                 startActivity(i);
-                finish();
             }
         });
     }

@@ -36,7 +36,7 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fab_add_post"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         app:layout_constraintTop_toTopOf="@id/bottom_nav_view"
         app:layout_insetEdge="bottom"
         app:srcCompat="@drawable/outline_add_circle_outline_24"
-        app:tint="@color/colorPrimary"
+        app:tint="@color/colorLight"
         />
 
 

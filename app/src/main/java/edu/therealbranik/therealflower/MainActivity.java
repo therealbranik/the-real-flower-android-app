@@ -1,19 +1,14 @@
 package edu.therealbranik.therealflower;
 
-import android.Manifest;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import edu.therealbranik.therealflower.homescreen.HomeScreenActivity;
-import edu.therealbranik.therealflower.homescreen.ProbaActivity;
+import edu.therealbranik.therealflower.homescreen.HomescreenActivity;
 import edu.therealbranik.therealflower.login_register.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         if (user == null) {
             i = new Intent(this, LoginActivity.class);
         } else {
-            i = new Intent(this, HomeScreenActivity.class);
+            i = new Intent(this, HomescreenActivity.class);
         }
 //        i = new Intent(this, ProbaActivity.class);
         startActivity(i);

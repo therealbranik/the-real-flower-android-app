@@ -3,7 +3,6 @@ package edu.therealbranik.therealflower.login_register;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -14,7 +13,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,9 +34,9 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 
 import edu.therealbranik.therealflower.R;
+import edu.therealbranik.therealflower.homescreen.HomescreenActivity;
 import edu.therealbranik.therealflower.user.User;
 import edu.therealbranik.therealflower.utility.UploadImageActivity;
 
@@ -48,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
     public static final int UPLOAD_FROM_CAMERA = 1002;
     private static int IMAMGE_MODE = 0;
 
+    private boolean AVATAR_UPLOADED;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
     StorageReference mStorageRef;
@@ -67,6 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        AVATAR_UPLOADED = false;
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -79,9 +79,11 @@ public class RegisterActivity extends AppCompatActivity {
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
         imageViewAvatar = (ImageView) findViewById(R.id.imageViewAvatar);
 
+//        buttonRegister.setEnabled(false);
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                buttonRegister.setEnabled(false);
                 register();
             }
         });
@@ -130,41 +132,49 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void register () {
+    private void register() {
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
         String confirmedPassword = editTextPasswordConfirm.getText().toString();
 
-//        if (!isFiledsFilled()) {
-//            Toast.makeText(this, R.string.incomplite_fields, Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        if (!password.equals(confirmedPassword)) {
-//            Toast.makeText(this, R.string.passwords_dont_match, Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-
-        if (imageURI == null) {
-            Toast.makeText(this, R.string.image_required, Toast.LENGTH_SHORT).show();
+        if (!isFiledsFilled()) {
+            Toast.makeText(this, R.string.incomplite_fields, Toast.LENGTH_SHORT).show();
+            buttonRegister.setEnabled(true);
             return;
         }
 
-        uploadAvatar();
-//        mAuth.createUserWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//                            FirebaseUser currentUser = mAuth.getCurrentUser();
-//                            currentUser.sendEmailVerification();
-//                            uploadData();
-//                        }
-//                    }
-//                });
+        if (!password.equals(confirmedPassword)) {
+            Toast.makeText(this, R.string.passwords_dont_match, Toast.LENGTH_SHORT).show();
+            buttonRegister.setEnabled(true);
+            return;
+        }
+
+        if (imageURI == null) {
+            Toast.makeText(this, R.string.image_required, Toast.LENGTH_SHORT).show();
+            buttonRegister.setEnabled(true);
+            return;
+        }
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            currentUser.sendEmailVerification();
+                            uploadData();
+                        }
+                    }
+                }).
+                addOnFailureListener(RegisterActivity.this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        buttonRegister.setEnabled(true);
+                    }
+                });
     }
 
-    private boolean isFiledsFilled () {
+    private boolean isFiledsFilled() {
         String username = editTextUsername.getText().toString();
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
@@ -176,7 +186,7 @@ public class RegisterActivity extends AppCompatActivity {
                 || password.isEmpty()
                 || confirmedPassword.isEmpty()
                 || fullname.isEmpty()
-                )
+        )
 
             return false;
         else
@@ -184,12 +194,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void uploadAvatar () {
+    private void uploadAvatar() {
         if (IMAMGE_MODE == UPLOAD_FROM_FILE_SYSTEM && imageURI != null) {
             try {
                 FirebaseUser currentUser = mAuth.getCurrentUser();
-//                String fileName = currentUser.getUid().toString() + ".jpg";
-                String fileName = "asdasdasd" + ".jpg";
+                String fileName = currentUser.getUid().toString() + ".jpg";
                 StorageReference avatarsRef = mStorageRef.child("images/avatars/" + fileName);
 
                 Bitmap bitmap = ((BitmapDrawable) imageViewAvatar.getDrawable()).getBitmap();
@@ -198,23 +207,21 @@ public class RegisterActivity extends AppCompatActivity {
                 byte[] data = baos.toByteArray();
 
 
-//                Bitmap bitmapImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageURI);
-//
-//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//                byte[] data = baos.toByteArray();
-
                 UploadTask uploadTask = avatarsRef.putBytes(data);
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Toast.makeText(RegisterActivity.this, "Success uploaded avatar!", Toast.LENGTH_LONG).show();
-                            }
-                        })
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        AVATAR_UPLOADED = true;
+                        Intent i = new Intent(RegisterActivity.this, HomescreenActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(RegisterActivity.this, "Failed uploaded avatar!", Toast.LENGTH_LONG).show();
+                                buttonRegister.setEnabled(true);
                             }
                         });
             } catch (Exception e) {
@@ -223,7 +230,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadData () {
+    private void uploadData() {
         String username = editTextUsername.getText().toString();
         String email = editTextEmail.getText().toString();
         String fullName = editTextFullName.getText().toString();
@@ -242,21 +249,8 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(RegisterActivity.this, R.string.signin_failed, Toast.LENGTH_SHORT).show();
+                        buttonRegister.setEnabled(true);
                     }
                 });
     }
-
-//    private String getRealPathFromURI(Uri contentURI) {
-//        String result;
-//        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
-//        if (cursor == null) { // Source is Dropbox or other similar local file path
-//            result = contentURI.getPath();
-//        } else {
-//            cursor.moveToFirst();
-//            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-//            result = cursor.getString(idx);
-//            cursor.close();
-//        }
-//        return result;
-//    }
 }

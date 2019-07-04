@@ -15,6 +15,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.therealbranik.therealflower.R;
+import edu.therealbranik.therealflower.homescreen.HomescreenActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -39,8 +40,8 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-//                            Intent i = new Intent(LoginActivity.this, HomeScreen0Activity.class);
-//                            startActivity(i);
+                            Intent i = new Intent(LoginActivity.this, HomescreenActivity.class);
+                            startActivity(i);
                             finish();
                         } else {
                             Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();

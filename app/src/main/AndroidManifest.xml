@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -35,7 +36,8 @@
 
         <activity
             android:name=".post.AddPostMapsActivity"
-            android:label="@string/title_activity_add_post_maps">
+            android:label="@string/title_activity_add_post_maps"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.therealbranik.therealflower.post.AddPostActivity" />

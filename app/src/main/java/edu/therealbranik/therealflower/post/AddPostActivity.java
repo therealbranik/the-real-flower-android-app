@@ -1,5 +1,6 @@
 package edu.therealbranik.therealflower.post;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -22,6 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.Toast;
 
 import edu.therealbranik.therealflower.R;
 
@@ -109,5 +112,20 @@ public class AddPostActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        Toast.makeText(AddPostActivity.this, "VRNUL SAM SE", Toast.LENGTH_LONG).show();
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (resultCode == Activity.RESULT_OK) {
+                Double lon = data.getExtras().getDouble("lon");
+                Double lat = data.getExtras().getDouble("lat");
+                Toast.makeText(AddPostActivity.this, "Lon: " + lon.toString() + ", Lat: " + lat.toString() + " .\n", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+
+        }
     }
 }

@@ -1,12 +1,16 @@
 package edu.therealbranik.therealflower.post;
 
 public class Post {
+
+
+    private String userId;
     private String name;
     private String description;
-    private int longitude;
-    private int latitude;
+    private double longitude;
+    private double latitude;
 
-    Post (String name, String description, int longitude, int latitude) {
+    Post (String userId, String name, String description, double longitude, double latitude) {
+        this.userId = userId;
         this.name = name;
         this.description = description;
         this.longitude = longitude;
@@ -31,19 +35,27 @@ public class Post {
         this.description = description;
     }
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(int longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(int latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

@@ -46,8 +46,8 @@ public class AddPostMapsActivity extends AppCompatActivity implements OnMapReady
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setTitle(R.string.set_location);
 
-        mLatitude = Double.NaN;
-        mLongitude = Double.NaN;
+        mLatitude = getIntent().getExtras().getDouble("lat");
+        mLongitude = getIntent().getExtras().getDouble("lon");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabAddLocOnClickListener);
@@ -70,6 +70,7 @@ public class AddPostMapsActivity extends AppCompatActivity implements OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
 //        // Add a marker in Sydney and move the camera
 //        LatLng sydney = new LatLng(-34, 151);
@@ -82,6 +83,12 @@ public class AddPostMapsActivity extends AppCompatActivity implements OnMapReady
        }
 
        setOnMapClickListener();
+       drawMarker();
+       if (validation()) {
+            LatLng location = new LatLng(mLatitude, mLongitude);
+            mMap.addMarker(new MarkerOptions().position(location).title("Location"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 20.0f));
+       }
 
     }
 
@@ -109,8 +116,7 @@ public class AddPostMapsActivity extends AppCompatActivity implements OnMapReady
             public void onMapClick(LatLng latLng) {
                 mLongitude = latLng.longitude;
                 mLatitude = latLng.latitude;
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(latLng));
+                drawMarker();
             }
         });
     }
@@ -119,7 +125,7 @@ public class AddPostMapsActivity extends AppCompatActivity implements OnMapReady
         @Override
         public void onClick(View v) {
             if (Double.isNaN(mLatitude) || Double.isNaN(mLongitude)) {
-                Toast.makeText(AddPostMapsActivity.this, "Izaberi lokaciju", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddPostMapsActivity.this, R.string.choose_location, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -130,4 +136,19 @@ public class AddPostMapsActivity extends AppCompatActivity implements OnMapReady
             finish();
         }
     };
+
+    private void drawMarker () {
+        if (validation()) {
+            mMap.clear();
+            mMap.addMarker(new MarkerOptions().position(new LatLng(mLatitude, mLongitude)));
+        }
+    }
+
+    private boolean validation () {
+        if (Double.isNaN(mLatitude) || Double.isNaN(mLongitude)) {
+            return false;
+        }
+
+        return true;
+    }
 }

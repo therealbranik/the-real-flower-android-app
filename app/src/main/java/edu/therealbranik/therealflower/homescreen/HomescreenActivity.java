@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.PersistableBundle;
 import android.view.MenuItem;
@@ -23,11 +25,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.therealbranik.therealflower.R;
+import edu.therealbranik.therealflower.homescreen.explore.ExploreFragment;
+import edu.therealbranik.therealflower.homescreen.home.HomeFragment;
+import edu.therealbranik.therealflower.homescreen.profile.ProfileFragment;
+import edu.therealbranik.therealflower.homescreen.social.SocialFragment;
 import edu.therealbranik.therealflower.login_register.LoginActivity;
 import edu.therealbranik.therealflower.post.AddPostActivity;
 
 public class HomescreenActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+
+    final Fragment fragmentHome = new HomeFragment();
+    final Fragment fragmentSocial = new SocialFragment();
+    final Fragment fragmentExplore = new ExploreFragment();
+    final Fragment fragmentProfile = new ProfileFragment();
+
+    final FragmentManager fm = getSupportFragmentManager();
+    Fragment activeTab = fragmentHome;
 
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
@@ -39,19 +53,22 @@ public class HomescreenActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Toast.makeText(HomescreenActivity.this, item.getItemId()+"", Toast.LENGTH_SHORT).show();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-//                    mTextMessage.setText(R.string.title_home);
+                    fm.beginTransaction().hide(activeTab).show(fragmentHome).commit();
+                    activeTab = fragmentHome;
                     return true;
                 case R.id.navigation_social:
-//                    mTextMessage.setText(R.string.title_dashboard);
+                    fm.beginTransaction().hide(activeTab).show(fragmentSocial).commit();
+                    activeTab = fragmentSocial;
                     return true;
                 case R.id.navigation_explore:
-//                    mTextMessage.setText(R.string.title_notifications);
+                    fm.beginTransaction().hide(activeTab).show(fragmentExplore).commit();
+                    activeTab = fragmentExplore;
                     return true;
                 case R.id.navigation_profile:
-//                    mTextMessage.setText(R.string.title_notifications);
+                    fm.beginTransaction().hide(activeTab).show(fragmentProfile).commit();
+                    activeTab = fragmentProfile;
                     return true;
             }
             return false;
@@ -78,6 +95,13 @@ public class HomescreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homescreen);
+
+
+        fm.beginTransaction().add(R.id.homescreen_tabs_container, fragmentProfile, "3").hide(fragmentProfile).commit();
+        fm.beginTransaction().add(R.id.homescreen_tabs_container, fragmentExplore, "3").hide(fragmentExplore).commit();
+        fm.beginTransaction().add(R.id.homescreen_tabs_container, fragmentSocial, "2").hide(fragmentSocial).commit();
+        fm.beginTransaction().add(R.id.homescreen_tabs_container,fragmentHome, "1").commit();
+
         mAuth = FirebaseAuth.getInstance();
         BottomNavigationView navView = (BottomNavigationView) findViewById(R.id.bottom_nav_view);
         NavigationView navViewDrawer = (NavigationView) findViewById(R.id.nav_view);

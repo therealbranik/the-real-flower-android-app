@@ -54,7 +54,9 @@
         <activity
             android:name=".homescreen.HomescreenActivity"
             android:label="@string/title_activity_homescreen"
-            android:parentActivityName=".login_register.RegisterActivity" />
+            android:parentActivityName=".login_register.RegisterActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".utility.UploadImageActivity"
             android:theme="@style/MyDialog" />

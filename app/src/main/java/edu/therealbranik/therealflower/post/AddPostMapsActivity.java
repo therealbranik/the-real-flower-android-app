@@ -80,6 +80,13 @@ public class AddPostMapsActivity extends AppCompatActivity implements OnMapReady
        if (!Permissons.Check_FINE_LOCATION(AddPostMapsActivity.this) && !Permissons.Check_COARSE_LOCATION(AddPostMapsActivity.this)) {
            Permissons.Request_FINE_LOCATION(AddPostMapsActivity.this, PERMISSION_ACCESS_FINE_LOCATION);
            Permissons.Request_COARSE_LOCATION(AddPostMapsActivity.this, PERMISSION_ACCESS_COARSE_LOCATION);
+       } else {
+           try {
+               mMap.setMyLocationEnabled(true);
+               mMap.getUiSettings().setMyLocationButtonEnabled(true);
+           } catch (SecurityException e) {
+
+           }
        }
 
        setOnMapClickListener();

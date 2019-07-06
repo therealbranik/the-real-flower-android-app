@@ -9,7 +9,7 @@ public class Post {
     private double longitude;
     private double latitude;
 
-    Post (String userId, String name, String description, double longitude, double latitude) {
+    public Post (String userId, String name, String description, double longitude, double latitude) {
         this.userId = userId;
         this.name = name;
         this.description = description;
@@ -17,7 +17,7 @@ public class Post {
         this.latitude = latitude;
     }
 
-    Post () {}
+    public Post () {}
 
     public String getName() {
         return name;

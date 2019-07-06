@@ -59,4 +59,6 @@
     <string name="post">Post</string>
     <string name="set_location">Set location</string>
     <string name="choose_location">Choose location</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 </resources>

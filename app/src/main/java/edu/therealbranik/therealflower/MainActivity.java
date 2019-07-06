@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         if (user == null) {
             i = new Intent(this, LoginActivity.class);
         } else {
+
             i = new Intent(this, HomescreenActivity.class);
         }
 //        i = new Intent(this, ProbaActivity.class);

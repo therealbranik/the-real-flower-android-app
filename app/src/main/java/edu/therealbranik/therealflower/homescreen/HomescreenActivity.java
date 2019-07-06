@@ -1,7 +1,13 @@
 package edu.therealbranik.therealflower.homescreen;
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -14,6 +20,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,7 +29,6 @@ import androidx.fragment.app.FragmentManager;
 import android.os.PersistableBundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.therealbranik.therealflower.R;
@@ -31,8 +38,13 @@ import edu.therealbranik.therealflower.homescreen.profile.ProfileFragment;
 import edu.therealbranik.therealflower.homescreen.social.SocialFragment;
 import edu.therealbranik.therealflower.login_register.LoginActivity;
 import edu.therealbranik.therealflower.post.AddPostActivity;
+import edu.therealbranik.therealflower.settings.SettingsActivity;
+import edu.therealbranik.therealflower.user.LocationTrackingService;
 
 public class HomescreenActivity extends AppCompatActivity {
+
+    public static final String BROADCAST_ON_CHANGE_LOCATION = ".homescreen.OnLocationChangeReceiver";
+
     private FirebaseAuth mAuth;
 
     final Fragment fragmentHome = new HomeFragment();
@@ -57,18 +69,22 @@ public class HomescreenActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     fm.beginTransaction().hide(activeTab).show(fragmentHome).commit();
                     activeTab = fragmentHome;
+                    setTitle(R.string.title_home);
                     return true;
                 case R.id.navigation_social:
                     fm.beginTransaction().hide(activeTab).show(fragmentSocial).commit();
                     activeTab = fragmentSocial;
+                    setTitle(R.string.title_social);
                     return true;
                 case R.id.navigation_explore:
                     fm.beginTransaction().hide(activeTab).show(fragmentExplore).commit();
                     activeTab = fragmentExplore;
+                    setTitle(R.string.title_explore);
                     return true;
                 case R.id.navigation_profile:
                     fm.beginTransaction().hide(activeTab).show(fragmentProfile).commit();
                     activeTab = fragmentProfile;
+                    setTitle(R.string.title_profile);
                     return true;
             }
             return false;
@@ -86,6 +102,9 @@ public class HomescreenActivity extends AppCompatActivity {
                             startActivity(i);
                             finish();
                         }
+                        case R.id.nav_settings:
+                            Intent i = new Intent(HomescreenActivity.this, SettingsActivity.class);
+                            startActivity(i);
                     }
                     return false;
                 }
@@ -124,6 +143,11 @@ public class HomescreenActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        startService(new Intent(this, LocationTrackingService.class));
+
+        IntentFilter intentFilter = new IntentFilter(BROADCAST_ON_CHANGE_LOCATION);
+        registerReceiver( new OnLocationChangeReceiver() , intentFilter);
     }
 
     @Override
@@ -145,4 +169,5 @@ public class HomescreenActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

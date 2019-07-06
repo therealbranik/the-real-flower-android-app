@@ -12,7 +12,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -21,7 +22,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".homescreen.OnLocationChangeReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
 
+        <service
+            android:name=".user.LocationTrackingService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".homescreen.HomescreenActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.therealbranik.therealflower.homescreen.HomescreenActivity" />
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -54,8 +73,8 @@
         <activity
             android:name=".homescreen.HomescreenActivity"
             android:label="@string/title_activity_homescreen"
-            android:parentActivityName=".login_register.RegisterActivity"
             android:launchMode="singleTop"
+            android:parentActivityName=".login_register.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".utility.UploadImageActivity"

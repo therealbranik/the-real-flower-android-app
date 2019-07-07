@@ -32,6 +32,8 @@ import androidx.core.app.ActivityCompat;
 public class LocationTrackingService extends Service {
     public static final String BROADCAST_ACTION = ".homescreen.OnLocationChangeReceiver";
     private static final int TWO_MINUTES = 1000 * 60 * 2;
+    private static final int MINUTE = 1000 * 60;
+    private static final int SECOND = 1000;
     public LocationManager locationManager;
     public MyLocationListener listener;
     public Location previousBestLocation = null;
@@ -55,8 +57,8 @@ public class LocationTrackingService extends Service {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return START_NOT_STICKY;
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 4000, 0, (LocationListener) listener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 0, listener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30 * SECOND, 0, (LocationListener) listener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30 * SECOND, 0, listener);
 
         return START_STICKY;
     }

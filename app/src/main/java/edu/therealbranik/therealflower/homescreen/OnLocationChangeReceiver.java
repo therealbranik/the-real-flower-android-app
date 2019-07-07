@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -41,7 +42,7 @@ public class OnLocationChangeReceiver extends BroadcastReceiver {
                 Double lat = extras.getDouble("lat");
                 Double lon = extras.getDouble("lon");
 
-                Position position = new Position(user.getUid(), lat, lon);
+                Position position = new Position(user.getUid(), lat, lon, FieldValue.serverTimestamp());
 
                 db.collection("positions").document(user.getUid())
                         .set(position);

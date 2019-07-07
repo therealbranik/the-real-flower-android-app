@@ -70,21 +70,25 @@ public class HomescreenActivity extends AppCompatActivity {
                     fm.beginTransaction().hide(activeTab).show(fragmentHome).commit();
                     activeTab = fragmentHome;
                     setTitle(R.string.title_home);
+                    toolbar.getMenu().clear();
                     return true;
                 case R.id.navigation_social:
                     fm.beginTransaction().hide(activeTab).show(fragmentSocial).commit();
                     activeTab = fragmentSocial;
                     setTitle(R.string.title_social);
+                    toolbar.getMenu().clear();
                     return true;
                 case R.id.navigation_explore:
                     fm.beginTransaction().hide(activeTab).show(fragmentExplore).commit();
                     activeTab = fragmentExplore;
                     setTitle(R.string.title_explore);
+                    toolbar.inflateMenu(R.menu.fragment_explore_menu);
                     return true;
                 case R.id.navigation_profile:
                     fm.beginTransaction().hide(activeTab).show(fragmentProfile).commit();
                     activeTab = fragmentProfile;
                     setTitle(R.string.title_profile);
+                    toolbar.getMenu().clear();
                     return true;
             }
             return false;
@@ -114,7 +118,6 @@ public class HomescreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homescreen);
-
 
         fm.beginTransaction().add(R.id.homescreen_tabs_container, fragmentProfile, "3").hide(fragmentProfile).commit();
         fm.beginTransaction().add(R.id.homescreen_tabs_container, fragmentExplore, "3").hide(fragmentExplore).commit();
@@ -167,7 +170,12 @@ public class HomescreenActivity extends AppCompatActivity {
         if (toggle.onOptionsItemSelected(item))
             return true;
 
+        if (item.getItemId() == R.id.menu_item_users || item.getItemId() == R.id.menu_item_posts) {
+            fragmentExplore.onOptionsItemSelected(item);
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
 
 }

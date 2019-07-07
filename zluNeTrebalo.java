@@ -145,10 +145,10 @@ public class ExploreFragment extends Fragment {
 //    }
 
     private void setOnChangePositionsListener () {
-        Thread thread = new Thread() {
-            @Override
-            public void run () {
-                try {
+//        Thread thread = new Thread() {
+//            @Override
+//            public void run () {
+//                try {
                     db.collection("positions")
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
@@ -164,13 +164,13 @@ public class ExploreFragment extends Fragment {
                                     }
                                 }
                             });
-                } catch (Exception e) {
+//                } catch (Exception e) {
+//
+//                }
+//            }
+//        };
 
-                }
-            }
-        };
-
-        thread.start();
+//        thread.start();
     }
 
     private void drawMarker (Position position) {
@@ -180,9 +180,7 @@ public class ExploreFragment extends Fragment {
                 oldMarker.remove();
             Marker m = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(position.getLat(), position.getLon()))
-                    .title(hashMapUsers.get(position.getUserId()).getUsername())
-                    //TODO SLIKA
-            );
+                    .title(hashMapUsers.get(position.getUserId()).getUsername()));
             hashMapMarkerUsers.put(position.getUserId(), m);
         } else {
             db.collection("users").document(position.getUserId())

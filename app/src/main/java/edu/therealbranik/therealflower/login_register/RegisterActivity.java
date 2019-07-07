@@ -237,11 +237,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         User user = new User(username, fullName, email, null);
 
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        FirebaseUser authUser = mAuth.getCurrentUser();
+        db.collection("users").document(authUser.getUid())
+                .set(user)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onComplete(@NonNull Task<Void> task) {
                         uploadAvatar();
                     }
                 })

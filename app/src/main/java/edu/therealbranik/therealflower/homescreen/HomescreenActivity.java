@@ -1,13 +1,8 @@
 package edu.therealbranik.therealflower.homescreen;
 
-import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -20,8 +15,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -36,12 +29,15 @@ import edu.therealbranik.therealflower.homescreen.explore.ExploreFragment;
 import edu.therealbranik.therealflower.homescreen.home.HomeFragment;
 import edu.therealbranik.therealflower.homescreen.profile.ProfileFragment;
 import edu.therealbranik.therealflower.homescreen.social.SocialFragment;
+import edu.therealbranik.therealflower.homescreen.social.friends.FriendsFragment;
 import edu.therealbranik.therealflower.login_register.LoginActivity;
 import edu.therealbranik.therealflower.post.AddPostActivity;
 import edu.therealbranik.therealflower.settings.SettingsActivity;
 import edu.therealbranik.therealflower.user.LocationTrackingService;
+import edu.therealbranik.therealflower.user.User;
+import edu.therealbranik.therealflower.user.UserProfileActivity;
 
-public class HomescreenActivity extends AppCompatActivity {
+public class HomescreenActivity extends AppCompatActivity implements FriendsFragment.OnListFragmentInteractionListener {
 
     public static final String BROADCAST_ON_CHANGE_LOCATION = ".homescreen.OnLocationChangeReceiver";
 
@@ -178,4 +174,10 @@ public class HomescreenActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onListFragmentInteraction(User item) {
+        Intent i = new Intent(this, UserProfileActivity.class);
+        i.putExtra("id", item.id);
+        startActivity(i);
+    }
 }

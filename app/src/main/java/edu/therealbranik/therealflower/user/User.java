@@ -1,12 +1,17 @@
 package edu.therealbranik.therealflower.user;
 
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.annotation.NonNull;
 
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class User {
 
+    @Exclude
+    public String id;
     private String username;
     private String fullName;
     private String email;
@@ -61,4 +66,11 @@ public class User {
         db.collection("users")
                 .add(this);
     }
+
+    public <T extends User> T withId(@NonNull final String id) {
+        this.id = id;
+        return (T) this;
+    }
+
+
 }

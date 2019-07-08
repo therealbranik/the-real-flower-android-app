@@ -85,8 +85,7 @@ public class ExploreFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = (View) inflater.inflate(R.layout.fragment_explore, container, false);
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);

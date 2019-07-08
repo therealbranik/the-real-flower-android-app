@@ -67,4 +67,8 @@
     <string name="posts_off">Posts OFF</string>
     <string name="title_activity_show_post">ShowPostActivity</string>
     <string name="title_activity_user_profile">UserProfileActivity</string>
+    <string name="title_activity_social_tabs">SocialTabsActivity</string>
+    <string name="friends">Friends</string>
+    <string name="nearby">Nearby</string>
+    <string name="title_activity_aasdadasdasdasd">aasdadasdasdasd</string>
 </resources>

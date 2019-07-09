@@ -1,5 +1,6 @@
 package edu.therealbranik.therealflower.homescreen;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -33,6 +34,7 @@ import edu.therealbranik.therealflower.homescreen.social.friends.FriendsFragment
 import edu.therealbranik.therealflower.login_register.LoginActivity;
 import edu.therealbranik.therealflower.post.AddPostActivity;
 import edu.therealbranik.therealflower.settings.SettingsActivity;
+import edu.therealbranik.therealflower.user.FriendRequestService;
 import edu.therealbranik.therealflower.user.LocationTrackingService;
 import edu.therealbranik.therealflower.user.User;
 import edu.therealbranik.therealflower.user.UserProfileActivity;
@@ -40,8 +42,12 @@ import edu.therealbranik.therealflower.user.UserProfileActivity;
 public class HomescreenActivity extends AppCompatActivity implements FriendsFragment.OnListFragmentInteractionListener {
 
     public static final String BROADCAST_ON_CHANGE_LOCATION = ".homescreen.OnLocationChangeReceiver";
+    public static final String BROADCAST_ON_FRIEND_REQUEST = ".homescreen.OnFriendRequestReceiver";
 
     private FirebaseAuth mAuth;
+
+    BroadcastReceiver receiverOnChangePosition = null;
+    BroadcastReceiver receiverOnFriendRequest = null;
 
     final Fragment fragmentHome = new HomeFragment();
     final Fragment fragmentSocial = new SocialFragment();
@@ -144,9 +150,15 @@ public class HomescreenActivity extends AppCompatActivity implements FriendsFrag
         });
 
         startService(new Intent(this, LocationTrackingService.class));
+        startService(new Intent(this, FriendRequestService.class));
 
         IntentFilter intentFilter = new IntentFilter(BROADCAST_ON_CHANGE_LOCATION);
-        registerReceiver( new OnLocationChangeReceiver() , intentFilter);
+        receiverOnChangePosition = new OnLocationChangeReceiver();
+        registerReceiver( receiverOnChangePosition , intentFilter);
+        IntentFilter intentFilterFriendRequest = new IntentFilter(BROADCAST_ON_FRIEND_REQUEST);
+        receiverOnFriendRequest = new OnFriendRequestReceiver();
+        registerReceiver( receiverOnFriendRequest, intentFilterFriendRequest);
+
     }
 
     @Override
@@ -179,5 +191,12 @@ public class HomescreenActivity extends AppCompatActivity implements FriendsFrag
         Intent i = new Intent(this, UserProfileActivity.class);
         i.putExtra("id", item.id);
         startActivity(i);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(receiverOnChangePosition);
+        unregisterReceiver(receiverOnFriendRequest);
+        super.onDestroy();
     }
 }

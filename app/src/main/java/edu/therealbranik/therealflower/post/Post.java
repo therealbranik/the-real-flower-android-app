@@ -1,8 +1,15 @@
 package edu.therealbranik.therealflower.post;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class Post {
 
-
+    @Exclude
+    public String id;
     private String userId;
     private String name;
     private String description;
@@ -57,5 +64,10 @@ public class Post {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public <T extends Post> T withId(@NonNull final String id) {
+        this.id = id;
+        return (T) this;
     }
 }

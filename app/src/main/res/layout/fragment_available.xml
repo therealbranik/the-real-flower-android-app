@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".homescreen.social.nearby.NearbyFragment">
+    tools:context=".homescreen.social.available.AvailableFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ListView
-        android:id="@+id/listViewAvailableDevices"
+        android:id="@+id/listViewAvailableUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

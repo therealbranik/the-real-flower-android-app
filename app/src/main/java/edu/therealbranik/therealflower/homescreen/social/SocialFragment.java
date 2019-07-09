@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 
 import edu.therealbranik.therealflower.R;
+import edu.therealbranik.therealflower.homescreen.social.available.AvailableFragment;
 import edu.therealbranik.therealflower.homescreen.social.friends.FriendsFragment;
 import edu.therealbranik.therealflower.homescreen.social.nearby.NearbyFragment;
 
@@ -24,9 +25,11 @@ public class SocialFragment extends Fragment {
 
     private static final int FRIENDS_TAB = 0;
     private static final int NEARBY_TAB = 1;
+    private static final int AVAILABLE_TAB = 2;
 
     final Fragment fragmentFriends = new FriendsFragment();
     final Fragment fragmentNearby = new NearbyFragment();
+    final Fragment fragmentAvailable = new AvailableFragment();
 
     Fragment activeTab = fragmentFriends;
 
@@ -56,6 +59,10 @@ public class SocialFragment extends Fragment {
                         getFragmentManager().beginTransaction().hide(activeTab).show(fragmentNearby).commit();
                         activeTab = fragmentNearby;
                         return;
+                    case AVAILABLE_TAB:
+                        getFragmentManager().beginTransaction().hide(activeTab).show(fragmentAvailable).commit();
+                        activeTab = fragmentAvailable;
+                        return;
                 }
             }
 
@@ -70,8 +77,7 @@ public class SocialFragment extends Fragment {
             }
         });
 
-//        getFragmentManager().beginTransaction().add(R.id.homescreen_tabs_container, fragmentProfile, "3").hide(fragmentProfile).commit();
-//        fm.beginTransaction().add(R.id.homescreen_tabs_container, fragmentExplore, "3").hide(fragmentExplore).commit();
+        getFragmentManager().beginTransaction().add(R.id.tabs_container_social, fragmentAvailable, "3").hide(fragmentAvailable).commit();
         getFragmentManager().beginTransaction().add(R.id.tabs_container_social, fragmentNearby, "2").hide(fragmentNearby).commit();
         getFragmentManager().beginTransaction().add(R.id.tabs_container_social, fragmentFriends, "1").commit();
 

@@ -99,6 +99,9 @@ public class FriendContent {
     public static void GetData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        ITEMS.clear();
+        ITEM_MAP.clear();
+
         db.collection("users")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

@@ -130,20 +130,20 @@ public class LocationTrackingService extends Service {
         locationManager.removeUpdates(listener);
     }
 
-    public static Thread performOnBackgroundThread(final Runnable runnable) {
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    runnable.run();
-                } finally {
-
-                }
-            }
-        };
-        t.start();
-        return t;
-    }
+//    public static Thread performOnBackgroundThread(final Runnable runnable) {
+//        final Thread t = new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    runnable.run();
+//                } finally {
+//
+//                }
+//            }
+//        };
+//        t.start();
+//        return t;
+//    }
 
     public class MyLocationListener implements LocationListener {
 

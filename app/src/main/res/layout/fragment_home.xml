@@ -1,14 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".homescreen.home.HomeFragment">
+    android:orientation="vertical"
+    tools:context=".homescreen.home.HomeFragment"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="HOME FRAGMENT" />
+        android:layout_height="342dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        app:cardBackgroundColor="@color/cardview_dark_background"
+        app:cardCornerRadius="16dp"
+        >
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/profile_avatar"
+            android:layout_width="118dp"
+            android:layout_height="117dp"
+            android:layout_marginStart="12dp"
+
+            android:layout_marginTop="20dp"
+            tools:srcCompat="@drawable/avatar1" />
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/name"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/post_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="55dp"
+            android:text="@string/description"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/post_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="80dp"
+            android:text="timestamp"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:id="@+id/button"
+            android:layout_width="55dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
+            android:src="@android:drawable/dialog_holo_dark_frame" />
+
+        <ImageView
+            android:id="@+id/post_img"
+            android:layout_width="152dp"
+            android:layout_height="141dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="150dp"
+            app:srcCompat="@color/colorAccent" />
+
+        <ImageView
+            android:id="@+id/post_img2"
+            android:layout_width="190dp"
+            android:layout_height="141dp"
+            android:layout_marginStart="190dp"
+            android:layout_marginTop="150dp"
+            app:srcCompat="@color/colorAccent" />
+
+    </androidx.cardview.widget.CardView>
+    <include layout="@layout/fragment_home_list"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/include_home"
+        ></include>
+</LinearLayout>

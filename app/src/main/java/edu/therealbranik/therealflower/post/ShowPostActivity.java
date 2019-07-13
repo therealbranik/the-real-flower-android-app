@@ -77,6 +77,7 @@ public class ShowPostActivity extends AppCompatActivity {
                             userID = post.getUserId();
                             loadData(post);
                             loadUserAvatar(post.getUserId());
+                            loadPhoto();
                         }
                     }
                 });
@@ -98,6 +99,17 @@ public class ShowPostActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         Picasso.get().load(uri.toString()).fit().into(imageViewAvatar);
+                    }
+                });
+    }
+
+    private void loadPhoto () {
+        StorageReference avatarRef = mStorage.getReference("images/posts/" +  postID + ".jpg");
+        avatarRef.getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri.toString()).fit().into(imageViewMainImage);
                     }
                 });
     }

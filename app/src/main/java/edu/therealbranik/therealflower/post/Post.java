@@ -17,6 +17,7 @@ public class Post {
     private double latitude;
     private String user_name;
     private String user_username;
+    private Object timestamp;
 
     public Post (String userId, String name, String description, double longitude, double latitude,
                     String user_username, String user_name) {
@@ -85,6 +86,14 @@ public class Post {
 
     public void setUser_username(String user_username) {
         this.user_username = user_username;
+    }
+
+    public Object getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Object timestamp) {
+        this.timestamp = timestamp;
     }
 
     public <T extends Post> T withId(@NonNull final String id) {

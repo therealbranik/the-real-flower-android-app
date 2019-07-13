@@ -1,25 +1,28 @@
 package edu.therealbranik.therealflower.homescreen.home;
 
+
+import android.net.Uri;
+
 public class CardModel {
-    private int profileImageId;
+    private String userID;
     private String nameId;
     private String descriptionId;
     private String timestampID;
     private int postImage1ID;
-    private int postImage2ID;
 
-    public CardModel(int profileImageId, String nameId, String descriptionId,String timestampID,int postImage1ID,int postImage2ID) {
+    public CardModel(String userID, String nameId, String descriptionId,String timestampID,int postImage1ID) {
         this.postImage1ID=postImage1ID;
-        this.postImage2ID=postImage2ID;
-        this.profileImageId=profileImageId;
+        this.userID=userID;
         this.descriptionId=descriptionId;
         this.nameId=nameId;
         this.timestampID=timestampID;
     }
 
-    public int getProfileImageId() {
-        return profileImageId;
+
+    public String getUserID() {
+        return userID;
     }
+
 
     public String getDescriptionId() {
         return descriptionId;
@@ -37,7 +40,4 @@ public class CardModel {
         return postImage1ID;
     }
 
-    public int getPostImage2ID() {
-        return postImage2ID;
-    }
 }

@@ -8,15 +8,6 @@
     tools:context=".post.AddPostActivity"
     tools:showIn="@layout/app_bar_add_post">
 
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="395dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="40dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/button_add_photos"
-        tools:layout_editor_absoluteX="8dp" />
-
     <EditText
         android:id="@+id/editTextName"
         android:layout_width="wrap_content"
@@ -26,11 +17,11 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/name"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextDescription"
@@ -40,21 +31,11 @@
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/description"
+        android:importantForAutofill="no"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="@+id/editTextName"
         app:layout_constraintStart_toStartOf="@+id/editTextName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextName"
-        android:importantForAutofill="no" />
-
-    <View
-        android:id="@+id/viewDivider"
-        android:layout_width="40dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
 
     <Button
         android:id="@+id/buttonLocation"
@@ -63,7 +44,7 @@
         android:text="@string/get_location"
         app:layout_constraintEnd_toEndOf="@+id/editTextDescription"
         app:layout_constraintStart_toStartOf="@+id/editTextDescription"
-        app:layout_constraintTop_toBottomOf="@+id/viewDivider" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextDescription" />
 
     <Button
         android:id="@+id/button_add_photos"
@@ -75,21 +56,12 @@
         app:layout_constraintStart_toStartOf="@+id/buttonLocation"
         app:layout_constraintTop_toBottomOf="@+id/buttonLocation" />
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="395dp"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/button_add_photos"
-        tools:layout_editor_absoluteX="8dp" />
-
     <Button
         android:id="@+id/buttonPost"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="@string/post"
         app:layout_constraintEnd_toEndOf="@+id/button_add_photos"
         app:layout_constraintStart_toStartOf="@+id/button_add_photos"
-        app:layout_constraintTop_toBottomOf="@+id/divider3" />
+        app:layout_constraintTop_toBottomOf="@+id/button_add_photos"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

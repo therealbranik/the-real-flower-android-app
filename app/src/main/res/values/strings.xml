@@ -84,4 +84,5 @@
     <string name="discoverable">Discoverable</string>
     <string name="location_sharing">Location sharing</string>
     <string name="title_activity_ranking">Rankking list</string>
+    <string name="actions">Actions</string>
 </resources>

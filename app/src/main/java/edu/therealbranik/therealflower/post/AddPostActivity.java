@@ -2,9 +2,6 @@ package edu.therealbranik.therealflower.post;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,10 +27,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -42,42 +35,28 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-
 import edu.therealbranik.therealflower.R;
-import edu.therealbranik.therealflower.homescreen.HomescreenActivity;
 import edu.therealbranik.therealflower.login_register.LoginActivity;
-import edu.therealbranik.therealflower.login_register.RegisterActivity;
 import edu.therealbranik.therealflower.ranking.RankingActivity;
 import edu.therealbranik.therealflower.settings.SettingsActivity;
 import edu.therealbranik.therealflower.user.User;
-import edu.therealbranik.therealflower.utility.UploadImageActivity;
 
 public class AddPostActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    public static final int GET_LOCATION = 9882;
-    public static final int GET_IMAGE = 9883;
-
 
     private double mLongitude;
     private double mLatitude;
     private Post mPost;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private FirebaseStorage mStorage;
-
-    private Uri photoUri;
 
     private Button buttonGetLocation;
     private Button buttonPost;
     private TextView textViewName;
     private TextView textViewDescription;
-    private ImageView imageViewAddPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +64,6 @@ public class AddPostActivity extends AppCompatActivity
         setContentView(R.layout.activity_add_post);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        mStorage = FirebaseStorage.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -104,7 +82,7 @@ public class AddPostActivity extends AppCompatActivity
                 Intent i = new Intent(AddPostActivity.this, AddPostMapsActivity.class);
                 i.putExtra("lat", mLatitude);
                 i.putExtra("lon", mLongitude);
-                startActivityForResult(i, GET_LOCATION);
+                startActivityForResult(i, 1);
             }
         });
         buttonPost = (Button) findViewById(R.id.buttonPost);
@@ -116,19 +94,7 @@ public class AddPostActivity extends AppCompatActivity
         });
         textViewName = (TextView) findViewById(R.id.editTextName);
         textViewDescription = (TextView) findViewById(R.id.editTextDescription);
-        imageViewAddPhoto = (ImageView) findViewById(R.id.imageViewAddPhoto);
-        imageViewAddPhoto.setOnClickListener(onClickListenerImageAddPhoto);
-        imageViewAddPhoto.setDrawingCacheEnabled(true);
-        imageViewAddPhoto.buildDrawingCache();
     }
-
-    private View.OnClickListener onClickListenerImageAddPhoto = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent i = new Intent(AddPostActivity.this, UploadImageActivity.class);
-            startActivityForResult(i, GET_IMAGE);
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -197,15 +163,10 @@ public class AddPostActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
-            if (requestCode == GET_LOCATION) {
+            if (resultCode == Activity.RESULT_OK) {
                 mLongitude = data.getExtras().getDouble("lon");
                 mLatitude= data.getExtras().getDouble("lat");
-            } else if (requestCode == GET_IMAGE) {
-
-                photoUri = Uri.parse(data.getStringExtra("uri"));
-                Picasso.get().load(photoUri).fit().into(imageViewAddPhoto);
             }
-
         } catch (Exception e) {
 
         }
@@ -243,53 +204,25 @@ public class AddPostActivity extends AppCompatActivity
 
                             Post post = new Post(user.getUid(), name, description, mLongitude, mLatitude, u.getUsername(), u.getFullName());
                             post.setTimestamp(FieldValue.serverTimestamp());
-
-                            DocumentReference postRef = db.collection("posts").document();
-                            String postId = postRef.getId();
-                            Toast.makeText(AddPostActivity.this, postId, Toast.LENGTH_SHORT).show();
-                            postRef.set(post)
-//                                    .add(post)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            db.collection("posts")
+                                    .add(post)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                db.collection("users").document(user.getUid()).update("points", FieldValue.increment(10));
-                                                uploadPhoto(postId);
-                                            }
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            db.collection("users").document(user.getUid()).update("points", FieldValue.increment(10));
+                                            finish();
                                         }
-                                    });
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(AddPostActivity.this, "adsasdasd", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     }
                 });
 
 
     }
-
-    private void uploadPhoto(String postId) {
-        if (photoUri != null) {
-            try {
-                FirebaseUser currentUser = mAuth.getCurrentUser();
-                String fileName = postId + ".jpg";
-                StorageReference avatarsRef = mStorage.getReference().child("images/posts/" + fileName);
-
-                Bitmap bitmap = ((BitmapDrawable) imageViewAddPhoto.getDrawable()).getBitmap();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
-
-
-                UploadTask uploadTask = avatarsRef.putBytes(data);
-                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        finish();
-                    }
-                });
-            } catch (Exception e) {
-                Toast.makeText(AddPostActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
 
 }

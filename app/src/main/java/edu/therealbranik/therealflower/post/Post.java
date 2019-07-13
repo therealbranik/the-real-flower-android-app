@@ -2,8 +2,14 @@ package edu.therealbranik.therealflower.post;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.ServerTimestamp;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @IgnoreExtraProperties
 public class Post {
@@ -17,10 +23,11 @@ public class Post {
     private double latitude;
     private String user_name;
     private String user_username;
-    private Object timestamp;
+    @ServerTimestamp
+    private Date timestamp;
 
-    public Post (String userId, String name, String description, double longitude, double latitude,
-                    String user_username, String user_name) {
+    public Post(String userId, String name, String description, double longitude, double latitude,
+                String user_username, String user_name) {
         this.userId = userId;
         this.name = name;
         this.description = description;
@@ -30,7 +37,8 @@ public class Post {
         this.user_name = user_name;
     }
 
-    public Post () {}
+    public Post() {
+    }
 
     public String getName() {
         return name;
@@ -88,11 +96,12 @@ public class Post {
         this.user_username = user_username;
     }
 
-    public Object getTimestamp() {
+    public Date getTimestamp() {
+
         return timestamp;
     }
 
-    public void setTimestamp(Object timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 

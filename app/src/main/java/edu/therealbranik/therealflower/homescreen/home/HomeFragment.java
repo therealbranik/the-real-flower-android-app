@@ -25,17 +25,16 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_home, container, false);
+        View view =  inflater.inflate(R.layout.fragment_home, container, false);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list_view_home);
-
+        ListView listView=view.findViewById(R.id.list_view_home);
         CardsAdapter adapter = new CardsAdapter(getContext());
 
         listView.setAdapter(adapter);
-        //TODO: ADD POST's FROM DATABASE
+        //TO DO: ADD POST's FROM DATABASE
         adapter.addAll();
 
-        return rootView;
+        return view;
     }
 
 }

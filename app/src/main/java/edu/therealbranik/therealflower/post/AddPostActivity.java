@@ -203,7 +203,7 @@ public class AddPostActivity extends AppCompatActivity
                             User u = task.getResult().toObject(User.class).withId(task.getResult().getId());
 
                             Post post = new Post(user.getUid(), name, description, mLongitude, mLatitude, u.getUsername(), u.getFullName());
-//                            post.setTimestamp(FieldValue.serverTimestamp());
+                            post.setTimestamp(FieldValue.serverTimestamp());
                             db.collection("posts")
                                     .add(post)
                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

@@ -29,8 +29,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import edu.therealbranik.therealflower.R;
@@ -79,7 +83,14 @@ public class HomeFragment extends Fragment {
                             }
                             for(int i=0;i<arrayPosts.size();i++)
                             {
-                                adapter.add(new CardModel(arrayPosts.get(i).getUserId(), arrayPosts.get(i).getName(), arrayPosts.get(i).getDescription(), arrayPosts.get(i).getUserId(),R.drawable.maslacak));
+                                String stringTimestamp = "";
+                                Date date = arrayPosts.get(i).getTimestamp() ;
+                                if (date != null) {
+                                    DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
+                                    stringTimestamp = dateFormat.format(date);
+                                }
+
+                                adapter.add(new CardModel(arrayPosts.get(i).getUserId(), arrayPosts.get(i).getName(), arrayPosts.get(i).getDescription(), stringTimestamp,R.drawable.maslacak));
                             }
                         }
                     }

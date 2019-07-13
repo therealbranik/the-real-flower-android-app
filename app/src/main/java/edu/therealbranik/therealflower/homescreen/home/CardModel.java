@@ -3,6 +3,8 @@ package edu.therealbranik.therealflower.homescreen.home;
 
 import android.net.Uri;
 
+import java.util.Date;
+
 public class CardModel {
     private String userID;
     private String nameId;
@@ -10,7 +12,7 @@ public class CardModel {
     private String timestampID;
     private int postImage1ID;
 
-    public CardModel(String userID, String nameId, String descriptionId,String timestampID,int postImage1ID) {
+    public CardModel(String userID, String nameId, String descriptionId, String timestampID, int postImage1ID) {
         this.postImage1ID=postImage1ID;
         this.userID=userID;
         this.descriptionId=descriptionId;

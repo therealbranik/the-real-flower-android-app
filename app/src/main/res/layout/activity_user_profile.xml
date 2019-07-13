@@ -20,6 +20,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_user_profile"
-        app:menu="@menu/activity_user_profile_drawer" />
+        app:menu="@menu/main_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

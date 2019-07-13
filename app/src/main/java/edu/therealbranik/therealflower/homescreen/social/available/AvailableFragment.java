@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.therealbranik.therealflower.R;
-import edu.therealbranik.therealflower.homescreen.social.friend_request.FriendRequest;
 import edu.therealbranik.therealflower.user.User;
 
 /**
@@ -47,6 +46,7 @@ public class AvailableFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,10 +63,10 @@ public class AvailableFragment extends Fragment {
         listViewAvailableUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                User u = indexToUsers.get(position);
-                FriendRequest request = new FriendRequest(mAuth.getUid(), u.id, FriendRequest.REQUEST);
-                db.collection("friend_requests")
-                        .add(request);
+//                User u = indexToUsers.get(position);
+//                FriendRequest request = new FriendRequest(mAuth.getUid(), u.id, FriendRequest.REQUEST);
+//                db.collection("friend_requests")
+//                        .add(request);
 
             }
         });

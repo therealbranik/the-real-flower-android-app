@@ -16,6 +16,7 @@ public class User {
     private String fullName;
     private String email;
     private String phoneNumber;
+    private int points;
     private FirebaseFirestore db;
 
     public User () {
@@ -60,6 +61,30 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void addPoints (int points) {
+        if (this.points >= 0) {
+            this.points += points;
+        } else {
+            this.points = points;
+        }
+    }
+
+    public void subPoints (int points) {
+        if (this.points > points) {
+            this.points -= points;
+        } else {
+            this.points = 0;
+        }
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public void save () {

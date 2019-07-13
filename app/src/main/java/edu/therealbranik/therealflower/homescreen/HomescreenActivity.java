@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,7 +25,6 @@ import androidx.fragment.app.FragmentManager;
 import android.os.PersistableBundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import edu.therealbranik.therealflower.R;
 import edu.therealbranik.therealflower.homescreen.explore.ExploreFragment;
@@ -33,11 +34,14 @@ import edu.therealbranik.therealflower.homescreen.social.SocialFragment;
 import edu.therealbranik.therealflower.homescreen.social.friends.FriendsFragment;
 import edu.therealbranik.therealflower.login_register.LoginActivity;
 import edu.therealbranik.therealflower.post.AddPostActivity;
+import edu.therealbranik.therealflower.ranking.RankingActivity;
 import edu.therealbranik.therealflower.settings.SettingsActivity;
+import edu.therealbranik.therealflower.user.FriendRequestReceiver;
 import edu.therealbranik.therealflower.user.FriendRequestService;
 import edu.therealbranik.therealflower.user.LocationTrackingService;
 import edu.therealbranik.therealflower.user.User;
 import edu.therealbranik.therealflower.user.UserProfileActivity;
+import edu.therealbranik.therealflower.utility.Permissons;
 
 public class HomescreenActivity extends AppCompatActivity implements FriendsFragment.OnListFragmentInteractionListener {
 
@@ -79,11 +83,13 @@ public class HomescreenActivity extends AppCompatActivity implements FriendsFrag
                     activeTab = fragmentSocial;
                     setTitle(R.string.title_social);
                     toolbar.getMenu().clear();
+                    toolbar.inflateMenu(R.menu.fragment_social_menu);
                     return true;
                 case R.id.navigation_explore:
                     fm.beginTransaction().hide(activeTab).show(fragmentExplore).commit();
                     activeTab = fragmentExplore;
                     setTitle(R.string.title_explore);
+                    toolbar.getMenu().clear();
                     toolbar.inflateMenu(R.menu.fragment_explore_menu);
                     return true;
                 case R.id.navigation_profile:
@@ -101,18 +107,27 @@ public class HomescreenActivity extends AppCompatActivity implements FriendsFrag
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Intent i;
                     switch (item.getItemId()) {
                         case R.id.nav_item_signout: {
                             mAuth.signOut();
-                            Intent i = new Intent(HomescreenActivity.this, LoginActivity.class);
+                            i = new Intent(HomescreenActivity.this, LoginActivity.class);
                             startActivity(i);
                             finish();
                         }
                         case R.id.nav_settings:
-                            Intent i = new Intent(HomescreenActivity.this, SettingsActivity.class);
+                            i = new Intent(HomescreenActivity.this, SettingsActivity.class);
+                            startActivity(i);
+                        case R.id.nav_ranking:
+                            i =new Intent(HomescreenActivity.this, RankingActivity.class);
                             startActivity(i);
                     }
-                    return false;
+
+
+
+                    DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                    return true;
                 }
             };
 
@@ -149,17 +164,38 @@ public class HomescreenActivity extends AppCompatActivity implements FriendsFrag
             }
         });
 
-        startService(new Intent(this, LocationTrackingService.class));
-        startService(new Intent(this, FriendRequestService.class));
+        if (!Permissons.Check_FINE_LOCATION(this) && !Permissons.Check_COARSE_LOCATION(this)) {
+            Permissons.Request_FINE_LOCATION(this, 1256);
+            Permissons.Request_COARSE_LOCATION(this, 1257);
+        } else {
+            startLocationService();
+        }
+
+
+//        Intent friendService = new Intent(this, FriendRequestService.class);
+//        startService(friendService);
 
         IntentFilter intentFilter = new IntentFilter(BROADCAST_ON_CHANGE_LOCATION);
         receiverOnChangePosition = new OnLocationChangeReceiver();
         registerReceiver( receiverOnChangePosition , intentFilter);
-        IntentFilter intentFilterFriendRequest = new IntentFilter(BROADCAST_ON_FRIEND_REQUEST);
-        receiverOnFriendRequest = new OnFriendRequestReceiver();
-        registerReceiver( receiverOnFriendRequest, intentFilterFriendRequest);
+        IntentFilter intentFilterFriendRequest = new IntentFilter(FriendRequestReceiver.BROADCAST_FRIEND_REQUEST);
+        receiverOnFriendRequest = new FriendRequestReceiver();
+        registerReceiver(receiverOnFriendRequest, intentFilterFriendRequest);
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == 1256 && resultCode == RESULT_OK) {
+            startLocationService();
+        } else if (requestCode == 1257 && resultCode == RESULT_OK) {
+            startLocationService();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 
     @Override
     public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
@@ -180,6 +216,8 @@ public class HomescreenActivity extends AppCompatActivity implements FriendsFrag
 
         if (item.getItemId() == R.id.menu_item_users || item.getItemId() == R.id.menu_item_posts) {
             fragmentExplore.onOptionsItemSelected(item);
+        } else if (item.getItemId() == R.id.menu_item_bt_discovery) {
+            //TODO
         }
 
         return super.onOptionsItemSelected(item);
@@ -195,8 +233,16 @@ public class HomescreenActivity extends AppCompatActivity implements FriendsFrag
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(receiverOnChangePosition);
+//        unregisterReceiver(receiverOnChangePosition);
         unregisterReceiver(receiverOnFriendRequest);
         super.onDestroy();
+    }
+
+    private void startLocationService () {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(HomescreenActivity.this, LocationTrackingService.class));
+        } else {
+            startService(new Intent(HomescreenActivity.this, LocationTrackingService.class));
+        }
     }
 }

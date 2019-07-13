@@ -1,5 +1,6 @@
 package edu.therealbranik.therealflower.user;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -38,12 +40,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.therealbranik.therealflower.R;
+import edu.therealbranik.therealflower.login_register.LoginActivity;
+import edu.therealbranik.therealflower.post.AddPostActivity;
+import edu.therealbranik.therealflower.ranking.RankingActivity;
+import edu.therealbranik.therealflower.settings.SettingsActivity;
 
 public class UserProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseFirestore db;
     private FirebaseStorage mStorage;
+    private FirebaseAuth mAuth;
 
     private TextView textViewFullname;
     private TextView textViewTelNumber;
@@ -59,6 +66,7 @@ public class UserProfileActivity extends AppCompatActivity
 
         db = FirebaseFirestore.getInstance();
         mStorage = FirebaseStorage.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         getProfileData(getIntent().getExtras().getString("id"));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -126,18 +134,23 @@ public class UserProfileActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        Intent i;
+        switch (item.getItemId()) {
+            case R.id.nav_item_signout: {
+                mAuth.signOut();
+                i = new Intent(UserProfileActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+                return true;
+            }
+            case R.id.nav_settings:
+                i = new Intent(UserProfileActivity.this, SettingsActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.nav_ranking:
+                i =new Intent(UserProfileActivity.this, RankingActivity.class);
+                startActivity(i);
+                return true;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

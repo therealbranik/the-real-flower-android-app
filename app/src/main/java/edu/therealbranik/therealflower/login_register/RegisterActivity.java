@@ -26,7 +26,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -236,7 +235,7 @@ public class RegisterActivity extends AppCompatActivity {
         String fullName = editTextFullName.getText().toString();
 
         User user = new User(username, fullName, email, null);
-
+        user.setPoints(0);
         FirebaseUser authUser = mAuth.getCurrentUser();
         db.collection("users").document(authUser.getUid())
                 .set(user)

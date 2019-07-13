@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -22,6 +24,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -35,6 +39,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.therealbranik.therealflower.R;
+import edu.therealbranik.therealflower.login_register.LoginActivity;
+import edu.therealbranik.therealflower.ranking.RankingActivity;
+import edu.therealbranik.therealflower.settings.SettingsActivity;
+import edu.therealbranik.therealflower.user.User;
 
 public class AddPostActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -126,19 +134,25 @@ public class AddPostActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_settings) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        Intent i;
+        switch (item.getItemId()) {
+            case R.id.nav_item_signout: {
+                mAuth.signOut();
+                i = new Intent(AddPostActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+                return true;
+            }
+            case R.id.nav_settings:
+                i = new Intent(AddPostActivity.this, SettingsActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.nav_ranking:
+                i =new Intent(AddPostActivity.this, RankingActivity.class);
+                startActivity(i);
+                return true;
         }
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -181,20 +195,33 @@ public class AddPostActivity extends AppCompatActivity
 
         FirebaseUser user = mAuth.getCurrentUser();
 
-        Post post = new Post(user.getUid(), name, description, mLongitude, mLatitude);
-        db.collection("posts")
-                .add(post)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("users").document(user.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        finish();
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            User u = task.getResult().toObject(User.class).withId(task.getResult().getId());
+
+                            Post post = new Post(user.getUid(), name, description, mLongitude, mLatitude, u.getUsername(), u.getFullName());
+                            db.collection("posts")
+                                    .add(post)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            db.collection("users").document(user.getUid()).update("points", FieldValue.increment(10));
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(AddPostActivity.this, "adsasdasd", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AddPostActivity.this, "adsasdasd", Toast.LENGTH_SHORT).show();
-            }
-        });
+                });
+
+
     }
 
 }

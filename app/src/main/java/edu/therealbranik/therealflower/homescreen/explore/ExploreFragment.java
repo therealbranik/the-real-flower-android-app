@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -170,20 +171,27 @@ public class ExploreFragment extends Fragment {
     }
 
     private void drawAllPositions () {
-        db.collection("positions")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                drawUserMarker(document.toObject(Position.class));
-                            }
-                        } else {
 
-                        }
-                    }
-                });
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                db.collection("positions")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        drawUserMarker(document.toObject(Position.class));
+                                    }
+                                } else {
+
+                                }
+                            }
+                        });
+            }
+        });
+        thread.start();
     }
 
     private void drawAllPosts () {
@@ -232,8 +240,8 @@ public class ExploreFragment extends Fragment {
                             return;
                         }
                         if (SHOW_USERS) {
-                            for (QueryDocumentSnapshot document : value) {
-                                drawPostMarker(document.toObject(Post.class), document.getId());
+                            for (DocumentChange documentChange : value.getDocumentChanges()) {
+                                drawPostMarker(documentChange.getDocument().toObject(Post.class), documentChange.getDocument().getId());
                             }
                         }
                     }
@@ -254,7 +262,7 @@ public class ExploreFragment extends Fragment {
                     .position(new LatLng(position.getLat(), position.getLon()))
                     .title(hashMapUsers.get(position.getUserId()).getUsername())
                     .snippet(hashMapUsers.get(position.getUserId()).getFullName())
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_person_pin_black_24dp)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_person_pin_blue_24dp)));
             markerIDtoUserID.put(m.getId(), position.getUserId());
             hashMapMarkerUsers.put(position.getUserId(), m);
         } else {

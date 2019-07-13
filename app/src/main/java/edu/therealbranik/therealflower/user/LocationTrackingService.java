@@ -15,6 +15,10 @@ package edu.therealbranik.therealflower.user;
 //}
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -22,12 +26,17 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+
+import edu.therealbranik.therealflower.R;
+import edu.therealbranik.therealflower.homescreen.HomescreenActivity;
 
 public class LocationTrackingService extends Service {
     public static final String BROADCAST_ACTION = ".homescreen.OnLocationChangeReceiver";
@@ -38,6 +47,8 @@ public class LocationTrackingService extends Service {
     public MyLocationListener listener;
     public Location previousBestLocation = null;
 
+    public static final String CHANNEL_ID = "ForegroundServiceChannel";
+
     Intent intent;
     int counter = 0;
 
@@ -45,22 +56,42 @@ public class LocationTrackingService extends Service {
     public void onCreate() {
         super.onCreate();
         intent = new Intent(BROADCAST_ACTION);
+
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        listener = new MyLocationListener();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            return START_NOT_STICKY;
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30 * SECOND, 0, (LocationListener) listener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30 * SECOND, 0, listener);
+
+
+
     }
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        listener = new MyLocationListener();
+        String input = intent.getStringExtra("inputExtra");
+        createNotificationChannel();
+        Intent notificationIntent = new Intent(this, HomescreenActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0, notificationIntent, 0);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return START_NOT_STICKY;
-        }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30 * SECOND, 0, (LocationListener) listener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30 * SECOND, 0, listener);
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle(getResources().getString(R.string.location_sharing))
+                .setContentText(input)
+                .setSmallIcon(R.drawable.baseline_bluetooth_24)
+                .setContentIntent(pendingIntent)
+                .build();
 
-        return START_STICKY;
+        startForeground(1, notification);
+
+
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -127,7 +158,7 @@ public class LocationTrackingService extends Service {
         // handler.removeCallbacks(sendUpdatesToUI);
         super.onDestroy();
         Log.v("STOP_SERVICE", "DONE");
-        locationManager.removeUpdates(listener);
+//        locationManager.removeUpdates(listener);
     }
 
 //    public static Thread performOnBackgroundThread(final Runnable runnable) {
@@ -148,16 +179,24 @@ public class LocationTrackingService extends Service {
     public class MyLocationListener implements LocationListener {
 
         public void onLocationChanged(final Location loc) {
-            Log.i("*****", "Location changed");
-            if (isBetterLocation(loc, previousBestLocation)) {
-                loc.getLatitude();
-                loc.getLongitude();
-                intent.putExtra("lat", loc.getLatitude());
-                intent.putExtra("lon", loc.getLongitude());
-                intent.putExtra("provider", loc.getProvider());
-                sendBroadcast(intent);
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("*****", "Location changed");
+                    if (isBetterLocation(loc, previousBestLocation)) {
+                        loc.getLatitude();
+                        loc.getLongitude();
+                        intent.putExtra("lat", loc.getLatitude());
+                        intent.putExtra("lon", loc.getLongitude());
+                        intent.putExtra("provider", loc.getProvider());
+                        sendBroadcast(intent);
 
-            }
+                    }
+                }
+            });
+
+            thread.start();
+
         }
 
         @Override
@@ -172,6 +211,19 @@ public class LocationTrackingService extends Service {
 
         public void onProviderEnabled(String provider) {
             Toast.makeText(getApplicationContext(), "Gps Enabled", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Foreground Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
         }
     }
 }

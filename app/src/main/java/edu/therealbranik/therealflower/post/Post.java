@@ -15,13 +15,18 @@ public class Post {
     private String description;
     private double longitude;
     private double latitude;
+    private String user_name;
+    private String user_username;
 
-    public Post (String userId, String name, String description, double longitude, double latitude) {
+    public Post (String userId, String name, String description, double longitude, double latitude,
+                    String user_username, String user_name) {
         this.userId = userId;
         this.name = name;
         this.description = description;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.user_username = user_username;
+        this.user_name = user_name;
     }
 
     public Post () {}
@@ -64,6 +69,22 @@ public class Post {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getUser_username() {
+        return user_username;
+    }
+
+    public void setUser_username(String user_username) {
+        this.user_username = user_username;
     }
 
     public <T extends Post> T withId(@NonNull final String id) {

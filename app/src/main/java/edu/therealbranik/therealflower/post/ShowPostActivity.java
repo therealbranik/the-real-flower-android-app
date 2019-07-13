@@ -97,7 +97,7 @@ public class ShowPostActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Picasso.get().load(uri.toString()).into(imageViewAvatar);
+                        Picasso.get().load(uri.toString()).fit().into(imageViewAvatar);
                     }
                 });
     }

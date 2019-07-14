@@ -4,7 +4,6 @@ package edu.therealbranik.therealflower.homescreen.profile;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -12,20 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,7 +32,6 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import edu.therealbranik.therealflower.R;
-import edu.therealbranik.therealflower.login_register.LoginActivity;
 import edu.therealbranik.therealflower.user.User;
 
 /**
@@ -50,7 +41,7 @@ public class ProfileFragment extends Fragment {
 
     Button locationBtn, moreFriendsBtn;
     ImageView avatar,friendAv1,friendAv2,friendAv3,friendAv4, shot1,shot2,shot3,shot4,shot5,shot6;
-    TextView profileName, phoneNumber, moreShots, textViewPoints;
+    TextView profileName, textViewUsername, moreShots, textViewPoints;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseStorage mStorage;
@@ -77,7 +68,6 @@ public class ProfileFragment extends Fragment {
         friendAv1=(ImageView)view.findViewById(R.id.friend_avatar1);
         friendAv2=(ImageView)view.findViewById(R.id.friend_avatar2);
         friendAv3=(ImageView)view.findViewById(R.id.friend_avatar3);
-//        friendAv4=(ImageView)view.findViewById(R.id.friend_avatar4);
         shot1=(ImageView)view.findViewById(R.id.profile_img_1);
         shot2=(ImageView)view.findViewById(R.id.profile_img_2);
         shot3=(ImageView)view.findViewById(R.id.profile_img_3);
@@ -86,7 +76,7 @@ public class ProfileFragment extends Fragment {
         shot6=(ImageView)view.findViewById(R.id.profile_img_6);
 
         profileName=(TextView)view.findViewById(R.id.profile_name_text);
-        phoneNumber=(TextView)view.findViewById(R.id.profile_phone_text);
+        textViewUsername=(TextView)view.findViewById(R.id.textViewUsername);
         moreShots=(TextView)view.findViewById(R.id.profile_more_text);
         textViewPoints = (TextView) view.findViewById(R.id.textViewPoints);
 
@@ -152,7 +142,7 @@ public class ProfileFragment extends Fragment {
 
     private void updateUserData (User user) {
         profileName.setText(user.getFullName());
-        phoneNumber.setText(user.getUsername());
+        textViewUsername.setText(user.getUsername());
         textViewPoints.setText(String.valueOf(user.getPoints()));
     }
 }

@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/profile_phone_text"
+        android:id="@+id/textViewUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="28dp"
@@ -210,6 +210,6 @@
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/profile_avatar"
-        app:layout_constraintTop_toBottomOf="@id/profile_phone_text" />
+        app:layout_constraintTop_toBottomOf="@id/textViewUsername" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

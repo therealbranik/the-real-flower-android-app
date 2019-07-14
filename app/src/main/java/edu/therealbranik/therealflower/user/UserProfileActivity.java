@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -22,7 +23,9 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -33,11 +36,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import javax.annotation.Nullable;
 
 import edu.therealbranik.therealflower.R;
 import edu.therealbranik.therealflower.login_register.LoginActivity;
@@ -52,12 +58,11 @@ public class UserProfileActivity extends AppCompatActivity
     private FirebaseStorage mStorage;
     private FirebaseAuth mAuth;
 
-    private TextView textViewFullname;
-    private TextView textViewTelNumber;
-    private ImageButton imageButtonLocation;
-    private ImageView imageViewAvatar;
-    private Group groupContent;
-    private ProgressBar progressBarLoading;
+    Button locationBtn, moreFriendsBtn;
+    ImageView avatar,friendAv1,friendAv2,friendAv3,friendAv4, shot1,shot2,shot3,shot4,shot5,shot6;
+    TextView profileName, textViewUsername, moreShots, textViewPoints;
+
+    String mUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +72,8 @@ public class UserProfileActivity extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         mStorage = FirebaseStorage.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        getProfileData(getIntent().getExtras().getString("id"));
+        mUserId = getIntent().getExtras().getString("id");
+        getProfileData(mUserId);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -78,13 +84,26 @@ public class UserProfileActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        textViewFullname = (TextView) findViewById(R.id.textViewFullname);
-        textViewTelNumber = (TextView) findViewById(R.id.textViewTelNumber);
-        imageButtonLocation = (ImageButton) findViewById(R.id.imageButtonLocation);
-        imageViewAvatar = (ImageView) findViewById(R.id.imageViewAvatar);
-        groupContent = (Group) findViewById(R.id.groupContent);
-        progressBarLoading = (ProgressBar) findViewById(R.id.progressBarLoading);
-        setLoading(true);
+        locationBtn = (Button) findViewById(R.id.profile_location_button);
+        moreFriendsBtn = (Button) findViewById(R.id.profile_friends_button);
+
+        avatar = (ImageView) findViewById(R.id.profile_avatar);
+        friendAv1 = (ImageView) findViewById(R.id.friend_avatar1);
+        friendAv2 = (ImageView) findViewById(R.id.friend_avatar2);
+        friendAv3 = (ImageView) findViewById(R.id.friend_avatar3);
+        shot1 = (ImageView) findViewById(R.id.profile_img_1);
+        shot2 = (ImageView) findViewById(R.id.profile_img_2);
+        shot3 = (ImageView) findViewById(R.id.profile_img_3);
+        shot4 = (ImageView) findViewById(R.id.profile_img_4);
+        shot5 = (ImageView) findViewById(R.id.profile_img_5);
+        shot6 = (ImageView) findViewById(R.id.profile_img_6);
+
+        profileName = (TextView) findViewById(R.id.profile_name_text);
+        textViewUsername = (TextView) findViewById(R.id.textViewUsername);
+        moreShots = (TextView) findViewById(R.id.profile_more_text);
+        textViewPoints = (TextView) findViewById(R.id.textViewPoints);
+
+
     }
 
     @Override
@@ -132,16 +151,16 @@ public class UserProfileActivity extends AppCompatActivity
                 i = new Intent(UserProfileActivity.this, LoginActivity.class);
                 startActivity(i);
                 finish();
-                return true;
+                break;
             }
             case R.id.nav_settings:
                 i = new Intent(UserProfileActivity.this, SettingsActivity.class);
                 startActivity(i);
-                return true;
+                break;
             case R.id.nav_ranking:
-                i =new Intent(UserProfileActivity.this, RankingActivity.class);
+                i = new Intent(UserProfileActivity.this, RankingActivity.class);
                 startActivity(i);
-                return true;
+                break;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -149,7 +168,7 @@ public class UserProfileActivity extends AppCompatActivity
         return true;
     }
 
-    private void getProfileData (final String id) {
+    private void getProfileData(final String id) {
         db.collection("users").document(id)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -157,30 +176,44 @@ public class UserProfileActivity extends AppCompatActivity
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             User u = (User) task.getResult().toObject(User.class).withId(task.getResult().getId());
-                            textViewFullname.setText(u.getFullName());
-                            if (u.getPhoneNumber() != null)
-                                textViewTelNumber.setText(u.getPhoneNumber());
-                            StorageReference avatarRef = mStorage.getReference("images/avatars/" +  u.id + ".jpg");
+                            StorageReference avatarRef = mStorage.getReference("images/avatars/" + u.id + ".jpg");
                             avatarRef.getDownloadUrl()
-                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Picasso.get().load(uri.toString()).into(imageViewAvatar);
-                                        setLoading(false);
-                                    }
-                                });
+                                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Picasso.get().load(uri.toString()).into(avatar);
+                                        }
+                                    });
+                            updateUserData(u);
                         }
                     }
                 });
     }
 
-    private void setLoading (boolean loading) {
-        if (loading) {
-            groupContent.setVisibility(View.GONE);
-            progressBarLoading.setVisibility(View.VISIBLE);
-        } else {
-            progressBarLoading.setVisibility(View.GONE);
-            groupContent.setVisibility(View.VISIBLE);
-        }
+    private void updateUserData (User u) {
+        profileName.setText(u.getFullName());
+        textViewUsername.setText(u.getUsername());
+        textViewPoints.setText(String.valueOf(u.getPoints()));
+    }
+
+    private void setOnUserChangeListener () {
+        db.collection("users").document(mUserId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("ASDASDASDDSS", "Listen failed.", e);
+                            return;
+                        }
+
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            User u = documentSnapshot.toObject(User.class).withId(documentSnapshot.getId());
+                            updateUserData(u);
+                        } else {
+                            Log.d("ASDASDASDASD", "Current data: null");
+                        }
+
+                    }
+                });
     }
 }

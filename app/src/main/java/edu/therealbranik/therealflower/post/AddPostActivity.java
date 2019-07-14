@@ -109,6 +109,7 @@ public class AddPostActivity extends AppCompatActivity
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                buttonPost.setEnabled(false);
                 makePost();
             }
         });
@@ -243,9 +244,7 @@ public class AddPostActivity extends AppCompatActivity
 
                             DocumentReference postRef = db.collection("posts").document();
                             String postId = postRef.getId();
-                            Toast.makeText(AddPostActivity.this, postId, Toast.LENGTH_SHORT).show();
                             postRef.set(post)
-//                                    .add(post)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
@@ -253,6 +252,13 @@ public class AddPostActivity extends AppCompatActivity
                                                 db.collection("users").document(user.getUid()).update("points", FieldValue.increment(10));
                                                 uploadPhoto(postId);
                                             }
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(AddPostActivity.this, getResources().getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                                            buttonPost.setEnabled(true);
                                         }
                                     });
                         }

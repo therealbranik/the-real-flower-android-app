@@ -114,13 +114,16 @@ public class HomescreenActivity extends AppCompatActivity implements FriendsFrag
                             i = new Intent(HomescreenActivity.this, LoginActivity.class);
                             startActivity(i);
                             finish();
+                            break;
                         }
                         case R.id.nav_settings:
                             i = new Intent(HomescreenActivity.this, SettingsActivity.class);
                             startActivity(i);
+                            break;
                         case R.id.nav_ranking:
                             i =new Intent(HomescreenActivity.this, RankingActivity.class);
                             startActivity(i);
+                            break;
                     }
 
 
@@ -239,10 +242,13 @@ public class HomescreenActivity extends AppCompatActivity implements FriendsFrag
     }
 
     private void startLocationService () {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(HomescreenActivity.this, LocationTrackingService.class));
-        } else {
-            startService(new Intent(HomescreenActivity.this, LocationTrackingService.class));
-        }
+
+        startService(new Intent(HomescreenActivity.this, LocationTrackingService.class));
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            startForegroundService(new Intent(HomescreenActivity.this, LocationTrackingService.class));
+//        } else {
+//            startService(new Intent(HomescreenActivity.this, LocationTrackingService.class));
+//        }
     }
 }

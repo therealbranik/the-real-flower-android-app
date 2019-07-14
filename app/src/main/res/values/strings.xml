@@ -91,4 +91,8 @@
     <string name="location_tracking_stopped">Location tracking stopped</string>
     <string name="location_tracking">Location tracking</string>
     <string name="something_went_wrong">Something went wrong</string>
+
+    <string name="title_activity_fullscreen_post">FullscreenPostActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

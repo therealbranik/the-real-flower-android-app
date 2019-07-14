@@ -10,9 +10,9 @@ public class CardModel {
     private String nameId;
     private String descriptionId;
     private String timestampID;
-    private int postImage1ID;
+    private String postImage1ID;
 
-    public CardModel(String userID, String nameId, String descriptionId, String timestampID, int postImage1ID) {
+    public CardModel(String userID, String nameId, String descriptionId, String timestampID, String postImage1ID) {
         this.postImage1ID=postImage1ID;
         this.userID=userID;
         this.descriptionId=descriptionId;
@@ -38,7 +38,7 @@ public class CardModel {
         return timestampID;
     }
 
-    public int getPostImage1ID() {
+    public String getPostImage1ID() {
         return postImage1ID;
     }
 

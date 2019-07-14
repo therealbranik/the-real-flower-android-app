@@ -26,10 +26,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".post.FullscreenPostActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen_post"
+            android:theme="@style/FullscreenTheme"></activity>
+
         <receiver
             android:name=".user.LocationServiceDismissReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
 
         <activity
             android:name=".ranking.RankingActivity"
@@ -73,8 +79,7 @@
             android:name=".user.LocationTrackingService"
             android:enabled="true"
             android:exported="true"
-            android:process=":something"
-            />
+            android:process=":something" />
 
         <activity
             android:name=".settings.SettingsActivity"

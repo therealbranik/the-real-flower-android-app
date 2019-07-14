@@ -7,4 +7,6 @@
     <color name="colorAccent">#FFC107</color>
     <color name="colorGoogleRed">#de5246</color>
     <color name="colorWhite">#FAFAFA</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

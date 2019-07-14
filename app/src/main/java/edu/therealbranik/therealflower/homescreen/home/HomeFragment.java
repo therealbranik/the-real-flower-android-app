@@ -90,14 +90,13 @@ public class HomeFragment extends Fragment {
                                     stringTimestamp = dateFormat.format(date);
                                 }
 
-                                adapter.add(new CardModel(arrayPosts.get(i).getUserId(), arrayPosts.get(i).getName(), arrayPosts.get(i).getDescription(), stringTimestamp,R.drawable.maslacak));
+                                adapter.add(new CardModel(arrayPosts.get(i).getUserId(), arrayPosts.get(i).getName(), arrayPosts.get(i).getDescription(), stringTimestamp,arrayPosts.get(i).id));
                             }
                         }
                     }
                 });
 
 
-        //TO DO: ADD POST's FROM DATABASE
 
 
         return view;

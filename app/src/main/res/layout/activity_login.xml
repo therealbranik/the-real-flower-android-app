@@ -11,7 +11,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite" />
+
+        >
+
+    </LinearLayout>
     ​
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -19,43 +22,46 @@
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/button_facebook"
         android:alpha="0.4"
-        android:background="@color/colorPrimaryDark"
+
+
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="93dp"
-        android:orientation="vertical" />
+        android:orientation="vertical" >
+
+    </LinearLayout>
     ​
 
-    <TextView
-        android:background="@android:color/transparent"
-        android:id="@+id/text_view_login_tittle"
-        style="@style/Base.TextAppearance.AppCompat.Headline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:text="@string/app_name"
-        android:textColor="@color/colorPrimary"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        app:fontFamily="serif-monospace"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout3" />
     ​
+
+    ​
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logo_image"
+        android:layout_width="403dp"
+        android:layout_height="263dp"
+        android:backgroundTintMode="add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:srcCompat="@drawable/logo" />
 
     <EditText
         android:id="@+id/edit_text_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_view_login_tittle"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/user_input_shape"
+        android:background="@drawable/edit_text_round_shape"
         android:hint="@string/email"
         android:maxLines="1"
         android:padding="16dp"
@@ -64,8 +70,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_view_login_tittle" />
-    ​
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <EditText
         android:id="@+id/edit_text_password"
@@ -74,15 +79,16 @@
         android:layout_below="@+id/edit_text_email"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/user_input_shape"
+        android:background="@drawable/edit_text_round_shape"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:padding="16dp"
         android:textColor="@color/colorPrimary"
         android:textColorHint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_text_email" />
     ​
@@ -96,10 +102,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/user_btn_shape"
+        android:background="@drawable/button_round_shape"
         android:text="@string/login"
-        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_text_password" />
     ​
@@ -111,12 +117,12 @@
         android:layout_below="@id/button_login"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/reg_btn_shape"
-        android:textColor="@color/colorPrimaryDark"
+        android:background="@drawable/button_round_shape"
         android:text="@string/singup"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_login" />
     ​
@@ -126,10 +132,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button_siginup"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:background="@android:color/transparent"
         app:layout_constraintTop_toBottomOf="@id/button_siginup"
         tools:layout_editor_absoluteX="0dp">
         ​
@@ -146,25 +151,21 @@
             android:layout_marginRight="6dp"
             android:layout_marginBottom="6dp"
             android:text="OR"
-            android:textAlignment="center"
-            android:background="@android:color/transparent"
-            android:textColor="@color/colorPrimary" />
+            android:textAlignment="center" />
         ​
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/divider_txt"
-            android:background="@color/colorPrimary" />
+            android:layout_marginRight="113dp"
+            android:layout_toLeftOf="@id/divider_txt" />
         ​
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/divider_txt"
-            android:background="@color/colorPrimary" />
+            android:layout_marginLeft="332dp"
+            android:layout_toRightOf="@id/divider_txt" />
         ​
     </RelativeLayout>
     ​
@@ -176,14 +177,14 @@
         android:layout_below="@id/divider"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/google_btn_shape"
         android:drawableStart="@drawable/ic_google_filled"
         android:drawableLeft="@drawable/ic_google_filled"
         android:paddingLeft="20dp"
         android:text="@string/button_google"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -205,13 +206,13 @@
         android:drawableLeft="@drawable/ic_facebook_logo"
         android:paddingLeft="20dp"
         android:text="@string/button_facebook"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_google"
-        app:layout_constraintVertical_bias="0.061" />
+        app:layout_constraintVertical_bias="0.418" />
     ​
 
 </androidx.constraintlayout.widget.ConstraintLayout>

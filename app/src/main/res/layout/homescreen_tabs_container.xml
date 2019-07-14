@@ -5,9 +5,10 @@
     android:id="@+id/homescreen_tabs_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:padding="1dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="MainActivity"
-    tools:showIn="@layout/activity_main"
-    android:padding="1dp" >
+    tools:showIn="@layout/activity_main">
 
 </FrameLayout>

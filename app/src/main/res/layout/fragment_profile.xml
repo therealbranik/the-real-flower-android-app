@@ -12,7 +12,7 @@
         android:layout_width="118dp"
         android:layout_height="117dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/avatar1" />
@@ -21,7 +21,8 @@
         android:id="@+id/profile_name_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="60dp"
         android:hint="Full name"
         android:textSize="20sp"
         app:layout_constraintLeft_toRightOf="@id/profile_avatar"
@@ -31,7 +32,8 @@
         android:id="@+id/profile_phone_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="16dp"
         android:hint="Phone Number"
         android:textSize="20sp"
         app:layout_constraintLeft_toRightOf="@id/profile_avatar"
@@ -39,15 +41,25 @@
 
     <Button
         android:id="@+id/profile_location_button"
-        android:layout_width="58dp"
-        android:layout_height="63dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_blue_white"
-        app:icon="@drawable/marker_default"
-        app:layout_constraintHorizontal_bias="0.653"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="68dp"
+        android:background="@color/colorPrimary"
+        app:icon="@android:drawable/ic_menu_mylocation"
+        app:layout_constraintHorizontal_bias="0.838"
         app:layout_constraintLeft_toRightOf="@id/profile_name_text"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profile_location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="10.5dp"
+        android:text="Location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_location_button" />
 
     <TextView
         android:id="@+id/profile_friends_text"
@@ -63,12 +75,12 @@
 
     <LinearLayout
         android:id="@+id/profile_linear_layout"
-        android:layout_width="411dp"
-        android:layout_height="63dp"
+        android:layout_width="292dp"
+        android:layout_height="60dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/profile_friends_button"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_friends_text">
 
         <ImageView
@@ -89,12 +101,6 @@
             android:layout_height="match_parent"
             app:srcCompat="@drawable/avatar1" />
 
-        <Button
-            android:id="@+id/profile_friends_button"
-            android:layout_width="59dp"
-            android:layout_height="wrap_content"
-            tools:text="+24" />
-
     </LinearLayout>
 
     <TextView
@@ -107,6 +113,16 @@
         android:textAllCaps="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_linear_layout" />
+
+    <Button
+        android:id="@+id/profile_friends_button"
+        android:layout_width="59dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="204dp"
+        tools:text="+24" />
 
     <TextView
         android:id="@+id/profile_more_text"
@@ -134,7 +150,9 @@
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="52dp"
+        app:layout_constraintEnd_toStartOf="@+id/profile_img_3"
         app:layout_constraintLeft_toRightOf="@id/profile_img_1"
         app:layout_constraintTop_toBottomOf="@id/profile_linear_layout"
         app:srcCompat="@color/colorAccent" />
@@ -143,9 +161,9 @@
         android:id="@+id/profile_img_3"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintLeft_toRightOf="@id/profile_img_2"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_more_text"
         app:srcCompat="@color/colorAccent" />
 
@@ -165,6 +183,8 @@
         android:layout_height="90dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="52dp"
+        app:layout_constraintEnd_toStartOf="@+id/profile_img_6"
         app:layout_constraintLeft_toRightOf="@id/profile_img_4"
         app:layout_constraintTop_toBottomOf="@id/profile_img_2"
         app:srcCompat="@color/colorAccent" />
@@ -173,9 +193,9 @@
         android:id="@+id/profile_img_6"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toRightOf="@id/profile_img_5"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_img_3"
         app:srcCompat="@color/colorAccent" />
 
@@ -183,8 +203,8 @@
         android:id="@+id/textViewPoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimary"

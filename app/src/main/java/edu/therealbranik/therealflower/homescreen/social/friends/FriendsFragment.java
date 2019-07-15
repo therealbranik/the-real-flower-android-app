@@ -12,7 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import javax.annotation.Nullable;
 
 import edu.therealbranik.therealflower.R;
 import edu.therealbranik.therealflower.homescreen.social.friends.friend.FriendContent;
@@ -28,6 +35,7 @@ public class FriendsFragment extends Fragment {
 
     private FirebaseFirestore db;
 
+    RecyclerView recyclerView;
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
@@ -70,7 +78,7 @@ public class FriendsFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -79,6 +87,7 @@ public class FriendsFragment extends Fragment {
             recyclerView.setAdapter(new MyFriendRecyclerViewAdapter(FriendContent.ITEMS, mListener));
         }
         FriendContent.GetData();    //Download user data from database
+        onChangeFriends();
 
         return view;
     }
@@ -113,6 +122,18 @@ public class FriendsFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(User item);
+        void onListFragmentInteraction(String item);
+    }
+
+    private void onChangeFriends () {
+        FirebaseFirestore.getInstance().collection("friends")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                        FriendContent.GetData();
+                        recyclerView.setAdapter(new MyFriendRecyclerViewAdapter(FriendContent.ITEMS, mListener));
+                    }
+                });
     }
 }

@@ -106,6 +106,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            clearDataStuctures();
                             for (DocumentSnapshot doc: task.getResult()) {
                                 Post p = doc.toObject(Post.class).withId(doc.getId());
 

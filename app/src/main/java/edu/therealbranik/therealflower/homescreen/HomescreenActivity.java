@@ -226,9 +226,9 @@ public class HomescreenActivity extends AppCompatActivity implements FriendsFrag
 
 
     @Override
-    public void onListFragmentInteraction(User item) {
+    public void onListFragmentInteraction(String item) {
         Intent i = new Intent(this, UserProfileActivity.class);
-        i.putExtra("id", item.id);
+        i.putExtra("id", item);
         startActivity(i);
     }
 

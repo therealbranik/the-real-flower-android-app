@@ -1,11 +1,19 @@
 package edu.therealbranik.therealflower.homescreen.social.friends;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import edu.therealbranik.therealflower.R;
 import edu.therealbranik.therealflower.homescreen.social.friends.FriendsFragment.OnListFragmentInteractionListener;
@@ -20,11 +28,11 @@ import java.util.List;
  */
 public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRecyclerViewAdapter.ViewHolder> {
 
-    private final List<User> mValues;
+    private final List<String> mValues;
     private final OnListFragmentInteractionListener mListener;
 
 
-    public MyFriendRecyclerViewAdapter(List<User> items, OnListFragmentInteractionListener listener) {
+    public MyFriendRecyclerViewAdapter(List<String> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -39,8 +47,22 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getUsername());
-        holder.mContentView.setText(mValues.get(position).getFullName());
+//        holder.mIdView.setText(mValues.get(position).getUsername());
+//        holder.mContentView.setText(mValues.get(position).getFullName());
+
+        String UserID=mValues.get(position);
+
+        FirebaseFirestore.getInstance().collection("users").document(UserID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    User u=task.getResult().toObject(User.class).withId(task.getResult().getId());
+                    holder.mIdView.setText(u.getUsername());
+                    holder.mContentView.setText(u.getFullName());
+                }
+            }
+        });
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +85,7 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public User mItem;
+        public String mItem;
 
         public ViewHolder(View view) {
             super(view);

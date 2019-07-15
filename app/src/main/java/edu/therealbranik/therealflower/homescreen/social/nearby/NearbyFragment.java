@@ -572,4 +572,5 @@ public class NearbyFragment extends Fragment {
         }
     };
 
+
 }

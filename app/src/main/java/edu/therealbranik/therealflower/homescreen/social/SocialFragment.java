@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 
 import edu.therealbranik.therealflower.R;
-import edu.therealbranik.therealflower.homescreen.social.available.AvailableFragment;
 import edu.therealbranik.therealflower.homescreen.social.friends.FriendsFragment;
 import edu.therealbranik.therealflower.homescreen.social.nearby.NearbyFragment;
 
@@ -29,7 +28,6 @@ public class SocialFragment extends Fragment {
 
     final Fragment fragmentFriends = new FriendsFragment();
     final Fragment fragmentNearby = new NearbyFragment();
-    final Fragment fragmentAvailable = new AvailableFragment();
 
     Fragment activeTab = fragmentFriends;
 
@@ -59,10 +57,6 @@ public class SocialFragment extends Fragment {
                         getFragmentManager().beginTransaction().hide(activeTab).show(fragmentNearby).commit();
                         activeTab = fragmentNearby;
                         return;
-                    case AVAILABLE_TAB:
-                        getFragmentManager().beginTransaction().hide(activeTab).show(fragmentAvailable).commit();
-                        activeTab = fragmentAvailable;
-                        return;
                 }
             }
 
@@ -77,7 +71,6 @@ public class SocialFragment extends Fragment {
             }
         });
 
-        getFragmentManager().beginTransaction().add(R.id.tabs_container_social, fragmentAvailable, "3").hide(fragmentAvailable).commit();
         getFragmentManager().beginTransaction().add(R.id.tabs_container_social, fragmentNearby, "2").hide(fragmentNearby).commit();
         getFragmentManager().beginTransaction().add(R.id.tabs_container_social, fragmentFriends, "1").commit();
 

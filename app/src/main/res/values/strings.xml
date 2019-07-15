@@ -91,8 +91,13 @@
     <string name="location_tracking_stopped">Location tracking stopped</string>
     <string name="location_tracking">Location tracking</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="connect">Connect</string>
+    <string name="send">Send</string>
 
     <string name="title_activity_fullscreen_post">FullscreenPostActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+    <string name="friend_req_from">Friend request from</string>
 </resources>

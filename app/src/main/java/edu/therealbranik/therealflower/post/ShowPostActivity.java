@@ -81,12 +81,10 @@ public class ShowPostActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
-
-
     private void loadData (Post post) {
+        setTitle(post.getName());
         textViewName.setText(post.getName());
         textViewUsername.setText(post.getUser_username());
         textViewDescription.setText(post.getDescription());

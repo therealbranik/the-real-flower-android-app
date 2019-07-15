@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,7 +36,6 @@ import edu.therealbranik.therealflower.post.AddPostActivity;
 import edu.therealbranik.therealflower.ranking.RankingActivity;
 import edu.therealbranik.therealflower.settings.SettingsActivity;
 import edu.therealbranik.therealflower.user.FriendRequestReceiver;
-import edu.therealbranik.therealflower.user.FriendRequestService;
 import edu.therealbranik.therealflower.user.LocationTrackingService;
 import edu.therealbranik.therealflower.user.User;
 import edu.therealbranik.therealflower.user.UserProfileActivity;

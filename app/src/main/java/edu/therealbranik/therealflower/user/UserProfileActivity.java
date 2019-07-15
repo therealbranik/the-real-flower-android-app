@@ -191,6 +191,7 @@ public class UserProfileActivity extends AppCompatActivity
     }
 
     private void updateUserData (User u) {
+        setTitle(u.getFullName());
         profileName.setText(u.getFullName());
         textViewUsername.setText(u.getUsername());
         textViewPoints.setText(String.valueOf(u.getPoints()));

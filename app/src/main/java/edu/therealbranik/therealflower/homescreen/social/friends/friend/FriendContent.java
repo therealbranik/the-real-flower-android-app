@@ -102,7 +102,7 @@ public class FriendContent {
         ITEMS.clear();
         ITEM_MAP.clear();
 
-        db.collection("users")
+        db.collection("friends")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

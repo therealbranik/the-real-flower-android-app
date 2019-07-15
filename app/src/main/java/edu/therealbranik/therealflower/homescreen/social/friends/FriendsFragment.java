@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import edu.therealbranik.therealflower.R;
 import edu.therealbranik.therealflower.homescreen.social.friends.friend.FriendContent;
 import edu.therealbranik.therealflower.user.User;
@@ -23,6 +25,8 @@ import edu.therealbranik.therealflower.user.User;
  * interface.
  */
 public class FriendsFragment extends Fragment {
+
+    private FirebaseFirestore db;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -60,6 +64,8 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friend_list, container, false);
+
+        db = FirebaseFirestore.getInstance();
 
         // Set the adapter
         if (view instanceof RecyclerView) {

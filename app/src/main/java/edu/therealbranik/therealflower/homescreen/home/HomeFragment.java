@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,7 +22,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -36,6 +38,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import edu.therealbranik.therealflower.R;
 import edu.therealbranik.therealflower.post.Post;
@@ -55,23 +59,49 @@ public class HomeFragment extends Fragment {
     private FirebaseStorage mStorage;
     ArrayList<Post> arrayPosts;
 
+    private ListView listView;
+    private CardsAdapter adapter ;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
 
-        ListView listView=view.findViewById(R.id.list_view_home);
-        final CardsAdapter adapter = new CardsAdapter(getContext());
-        listView.setAdapter(adapter);
+        listView = view.findViewById(R.id.list_view_home);
+
+        adapter = new CardsAdapter(getContext());
 
         arrayPosts=new ArrayList<>();
         mStorage = FirebaseStorage.getInstance();
         mAuth=FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
 
+        getPosts();
+        refreshPosts();
+        onChangePostsListener();
 
-        db.collection("posts").get()
+        return view;
+    }
+
+    private void refreshPosts () {
+        listView.setAdapter(adapter);
+    }
+
+    private void onChangePostsListener () {
+        db.collection("posts")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        clearDataStuctures();
+                        getPosts();
+                        refreshPosts();
+                    }
+                });
+    }
+
+    private void getPosts () {
+        db.collection("posts").orderBy("timestamp", Query.Direction.DESCENDING).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -95,11 +125,10 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 });
-
-
-
-
-        return view;
     }
 
+    private void clearDataStuctures () {
+        arrayPosts.clear();
+        adapter.clear();
+    }
 }
